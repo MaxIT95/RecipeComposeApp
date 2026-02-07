@@ -1,4 +1,4 @@
-package com.example.recipecomposeapp.ui.screen
+package com.example.recipecomposeapp.ui.favorites.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
