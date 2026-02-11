@@ -23,13 +23,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.recipecomposeapp.R
+import com.example.recipecomposeapp.core.ui.ScreenHeader
 import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
-import com.example.recipecomposeapp.ui.utils.ScreenHeader
 
 @Composable
 fun CategoriesScreen(innerPadding: PaddingValues) {
     Column {
-        ScreenHeader("КАТЕГОРИИ ", R.drawable.bcg_categories)
+        ScreenHeader("КАТЕГОРИИ ", R.drawable.bcg_categories, innerPadding)
         Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
 
             Spacer(Modifier.padding(vertical = 15.dp))

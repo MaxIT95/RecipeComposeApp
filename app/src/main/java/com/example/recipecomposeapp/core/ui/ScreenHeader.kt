@@ -1,7 +1,8 @@
-package com.example.recipecomposeapp.ui.utils
+package com.example.recipecomposeapp.core.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,16 +22,21 @@ import com.example.recipecomposeapp.R
 import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
 
 @Composable
-fun ScreenHeader(text: String, imageId: Int) {
-    Box(modifier = Modifier.fillMaxWidth()
-        .height(240.dp)
+fun ScreenHeader(text: String, imageId: Int, innerPaddingValues: PaddingValues) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(innerPaddingValues)
+            .height(240.dp)
     ) {
-        Image(painter = painterResource(imageId),
+        Image(
+            painter = painterResource(imageId),
             modifier = Modifier
                 .fillMaxSize()
                 .align(Alignment.TopCenter),
             contentScale = ContentScale.Crop,
-            contentDescription = "фон")
+            contentDescription = "фон"
+        )
         Surface(
             modifier = Modifier
                 .padding(16.dp)
@@ -42,14 +48,14 @@ fun ScreenHeader(text: String, imageId: Int) {
                 text = text,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 color = MaterialTheme.colorScheme.primary,
-                style = RecipesAppTypography.displayLarge            )
+                style = RecipesAppTypography.displayLarge
+            )
         }
     }
 }
 
-
 @Composable
 @Preview(showSystemUi = true, showBackground = true)
 fun ScreenHeaderPreview() {
-    ScreenHeader("КАТЕГОРИИ", R.drawable.bcg_categories)
+    ScreenHeader("КАТЕГОРИИ", R.drawable.bcg_categories, PaddingValues(16.dp))
 }
