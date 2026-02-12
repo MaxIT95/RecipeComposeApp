@@ -28,9 +28,9 @@ import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
 
 @Composable
 fun CategoriesScreen(innerPadding: PaddingValues) {
-    Column {
-        ScreenHeader("КАТЕГОРИИ ", R.drawable.bcg_categories, innerPadding)
-        Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
+    Column(modifier = Modifier.padding(innerPadding)) {
+        ScreenHeader("КАТЕГОРИИ ", R.drawable.bcg_categories)
+        Column {
 
             Spacer(Modifier.padding(vertical = 15.dp))
 

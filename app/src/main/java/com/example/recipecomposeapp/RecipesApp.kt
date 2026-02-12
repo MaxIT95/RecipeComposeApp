@@ -37,10 +37,9 @@ fun RecipesApp() {
                 )
             }
         ) { innerPadding ->
-            if (currentScreenState == ScreenId.CATEGORIES) {
-                CategoriesScreen(innerPadding)
-            } else {
-                FavoritesScreen(innerPadding)
+            when (currentScreenState) {
+                ScreenId.CATEGORIES -> CategoriesScreen(innerPadding)
+                ScreenId.FAVORITES -> FavoritesScreen(innerPadding)
             }
         }
     }

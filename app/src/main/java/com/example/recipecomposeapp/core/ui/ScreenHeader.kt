@@ -22,11 +22,10 @@ import com.example.recipecomposeapp.R
 import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
 
 @Composable
-fun ScreenHeader(text: String, imageId: Int, innerPaddingValues: PaddingValues) {
+fun ScreenHeader(text: String, imageId: Int) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(innerPaddingValues)
             .height(240.dp)
     ) {
         Image(
@@ -57,5 +56,5 @@ fun ScreenHeader(text: String, imageId: Int, innerPaddingValues: PaddingValues) 
 @Composable
 @Preview(showSystemUi = true, showBackground = true)
 fun ScreenHeaderPreview() {
-    ScreenHeader("КАТЕГОРИИ", R.drawable.bcg_categories, PaddingValues(16.dp))
+    ScreenHeader("КАТЕГОРИИ", R.drawable.bcg_categories)
 }
