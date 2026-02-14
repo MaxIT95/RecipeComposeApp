@@ -15,6 +15,7 @@ import com.example.recipecomposeapp.model.ScreenId
 import com.example.recipecomposeapp.ui.categories.screen.CategoriesScreen
 import com.example.recipecomposeapp.ui.navigation.BottomNavigation
 import com.example.recipecomposeapp.ui.favorites.screen.FavoritesScreen
+import com.example.recipecomposeapp.ui.recipes.RecipesScreen
 import com.example.recipecomposeapp.ui.theme.BackgroundColor
 import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
 
@@ -40,6 +41,7 @@ fun RecipesApp() {
             when (currentScreenState) {
                 ScreenId.CATEGORIES -> CategoriesScreen(innerPadding)
                 ScreenId.FAVORITES -> FavoritesScreen(innerPadding)
+                ScreenId.RECIPES -> RecipesScreen(innerPadding)
             }
         }
     }

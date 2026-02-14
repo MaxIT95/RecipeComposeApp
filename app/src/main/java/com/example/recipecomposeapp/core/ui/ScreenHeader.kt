@@ -18,34 +18,37 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.size.Dimension
 import com.example.recipecomposeapp.R
+import com.example.recipecomposeapp.ui.theme.Dimensions
 import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
 
 @Composable
-fun ScreenHeader(text: String, imageId: Int) {
+fun ScreenHeader(title: String, imagePainter: Int, modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(240.dp)
     ) {
         Image(
-            painter = painterResource(imageId),
-            modifier = Modifier
+            painter = painterResource(imagePainter),
+            modifier = modifier
                 .fillMaxSize()
                 .align(Alignment.TopCenter),
             contentScale = ContentScale.Crop,
             contentDescription = "фон"
         )
         Surface(
-            modifier = Modifier
-                .padding(16.dp)
+            modifier = modifier
+                .padding(Dimensions.paddingLarge)
                 .align(Alignment.BottomStart),
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(Dimensions.shapeSmall),
             color = MaterialTheme.colorScheme.background,
         ) {
             Text(
-                text = text,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                text = title,
+                modifier = modifier.padding(horizontal = Dimensions.paddingLarge,
+                    vertical = Dimensions.paddingMedium),
                 color = MaterialTheme.colorScheme.primary,
                 style = RecipesAppTypography.displayLarge
             )
