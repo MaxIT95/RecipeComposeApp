@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.recipecomposeapp.R
+import com.example.recipecomposeapp.ui.theme.Dimensions
 import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
 
 @Composable
@@ -55,21 +56,21 @@ fun NavigationButton(
 ) {
     Button(
         contentPadding = PaddingValues(0.dp),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(Dimensions.shapeSmall),
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = color
         ),
         modifier = mod
             .height(50.dp)
-            .padding(5.dp)
+            .padding(Dimensions.paddingSmall)
     ) {
         Text(
             name,
             style = RecipesAppTypography.titleMedium
         )
         if (iconId != null) {
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(Dimensions.paddingMedium))
             Icon(
                 painter = painterResource(iconId),
                 contentDescription = "",

@@ -58,7 +58,8 @@ val RecipesAppTypography = Typography(
 @Composable
 fun TypographyPreview() {
     RecipeComposeAppTheme {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(modifier = Modifier.padding(Dimensions.paddingLarge),
+            verticalArrangement = Arrangement.spacedBy(Dimensions.paddingMedium)) {
             Text("displayLarge - Заголовки экранов", style = RecipesAppTypography.displayLarge)
             Text("titleMedium - Карточки", style = RecipesAppTypography.titleMedium)
             Text("bodyMedium - Основной текст", style = RecipesAppTypography.bodyMedium)

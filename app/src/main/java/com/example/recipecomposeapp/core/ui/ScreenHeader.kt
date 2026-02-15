@@ -1,7 +1,8 @@
-package com.example.recipecomposeapp.ui.utils
+package com.example.recipecomposeapp.core.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,36 +18,43 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.size.Dimension
 import com.example.recipecomposeapp.R
+import com.example.recipecomposeapp.ui.theme.Dimensions
 import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
 
 @Composable
-fun ScreenHeader(text: String, imageId: Int) {
-    Box(modifier = Modifier.fillMaxWidth()
-        .height(240.dp)
+fun ScreenHeader(title: String, imagePainter: Int, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(240.dp)
     ) {
-        Image(painter = painterResource(imageId),
-            modifier = Modifier
+        Image(
+            painter = painterResource(imagePainter),
+            modifier = modifier
                 .fillMaxSize()
                 .align(Alignment.TopCenter),
             contentScale = ContentScale.Crop,
-            contentDescription = "фон")
+            contentDescription = "фон"
+        )
         Surface(
-            modifier = Modifier
-                .padding(16.dp)
+            modifier = modifier
+                .padding(Dimensions.paddingLarge)
                 .align(Alignment.BottomStart),
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(Dimensions.shapeSmall),
             color = MaterialTheme.colorScheme.background,
         ) {
             Text(
-                text = text,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                text = title,
+                modifier = modifier.padding(horizontal = Dimensions.paddingLarge,
+                    vertical = Dimensions.paddingMedium),
                 color = MaterialTheme.colorScheme.primary,
-                style = RecipesAppTypography.displayLarge            )
+                style = RecipesAppTypography.displayLarge
+            )
         }
     }
 }
-
 
 @Composable
 @Preview(showSystemUi = true, showBackground = true)

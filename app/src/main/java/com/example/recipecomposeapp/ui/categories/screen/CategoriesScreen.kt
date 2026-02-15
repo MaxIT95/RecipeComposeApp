@@ -22,17 +22,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.size.Dimension
 import com.example.recipecomposeapp.R
+import com.example.recipecomposeapp.core.ui.ScreenHeader
+import com.example.recipecomposeapp.ui.theme.Dimensions
 import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
-import com.example.recipecomposeapp.ui.utils.ScreenHeader
 
 @Composable
 fun CategoriesScreen(innerPadding: PaddingValues) {
-    Column {
+    Column(modifier = Modifier.padding(innerPadding)) {
         ScreenHeader("КАТЕГОРИИ ", R.drawable.bcg_categories)
-        Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
+        Column {
 
-            Spacer(Modifier.padding(vertical = 15.dp))
+            Spacer(Modifier.padding(vertical = Dimensions.paddingLarge))
 
 //            val categories = mutableListOf<CategoryInfo>()
 //            CategoryCards(categories)
@@ -45,7 +47,9 @@ fun CategoriesScreen(innerPadding: PaddingValues) {
 fun CategoryCards(categories: List<CategoryInfo>) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.padding(
+            Dimensions.paddingLarge
+        ),
         content = {
             items(categories) { category ->
                 CategoryCard(
@@ -72,7 +76,7 @@ fun CategoryCard(
             .width(150.dp),
         colors = CardDefaults
             .cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(Dimensions.shapeMedium)
     ) {
         Column {
             Image(
@@ -83,13 +87,13 @@ fun CategoryCard(
             )
             Text(
                 text = category,
-                modifier = Modifier.padding(5.dp),
+                modifier = Modifier.padding(Dimensions.paddingSmall),
                 color = MaterialTheme.colorScheme.primary,
                 style = RecipesAppTypography.bodyMedium
             )
             Text(
                 text = description,
-                modifier = Modifier.padding(5.dp),
+                modifier = Modifier.padding(Dimensions.paddingSmall),
                 color = MaterialTheme.colorScheme.primary,
                 style = RecipesAppTypography.bodySmall
             )
@@ -100,5 +104,5 @@ fun CategoryCard(
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun CategoriesScreenPreview() {
-    CategoriesScreen(PaddingValues(16.dp))
+    CategoriesScreen(PaddingValues(Dimensions.paddingLarge))
 }
