@@ -12,5 +12,7 @@ object Dimensions {
     // Размеры фигур
     val shapeSmall: Dp = 8.dp
     val shapeMedium: Dp = 16.dp
+    val cardLargeSize: Dp = 220.dp
+
 
 }
