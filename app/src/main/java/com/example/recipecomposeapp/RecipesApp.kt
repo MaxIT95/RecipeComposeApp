@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.recipecomposeapp.data.model.ScreenId
+import com.example.recipecomposeapp.ui.categories.model.CategoryUiModel
 import com.example.recipecomposeapp.ui.categories.screen.CategoriesScreen
 import com.example.recipecomposeapp.ui.navigation.BottomNavigation
 import com.example.recipecomposeapp.ui.favorites.screen.FavoritesScreen
@@ -36,10 +37,19 @@ fun RecipesApp() {
                 )
             }
         ) { innerPadding ->
+            var selectedCategory by remember { mutableStateOf<CategoryUiModel?>(null) }
+
             when (currentScreenState) {
-                ScreenId.CATEGORIES -> CategoriesScreen(innerPadding, {})
+                ScreenId.CATEGORIES -> CategoriesScreen(innerPadding, { category ->
+                    selectedCategory = category
+                    currentScreenState = ScreenId.RECIPES
+                })
+
                 ScreenId.FAVORITES -> FavoritesScreen(innerPadding)
-                ScreenId.RECIPES -> RecipesScreen(innerPadding)
+                ScreenId.RECIPES -> RecipesScreen(
+                    category = selectedCategory ?: error("Category is required"),
+                    innerPadding
+                )
             }
         }
     }

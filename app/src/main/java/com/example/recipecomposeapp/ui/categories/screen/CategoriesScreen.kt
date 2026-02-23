@@ -10,18 +10,20 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.recipecomposeapp.R
 import com.example.recipecomposeapp.core.ui.ScreenHeader
 import com.example.recipecomposeapp.data.repository.getCategories
 import com.example.recipecomposeapp.ui.categories.CategoryItem
 import com.example.recipecomposeapp.ui.categories.model.CategoryUiModel
 import com.example.recipecomposeapp.ui.categories.model.toUiModel
 import com.example.recipecomposeapp.ui.theme.Dimensions
+import com.example.recipecomposeapp.utils.ASSETS_URI_PREFIX
+
+const val CATEGORIES_IMAGE_URL = ASSETS_URI_PREFIX + "bcg_categories.png"
 
 @Composable
 fun CategoriesScreen(innerPadding: PaddingValues, onCategoryClick: (CategoryUiModel) -> Unit) {
     Column(modifier = Modifier.padding(innerPadding)) {
-        ScreenHeader("КАТЕГОРИИ ", R.drawable.bcg_categories)
+        ScreenHeader("КАТЕГОРИИ ", CATEGORIES_IMAGE_URL)
         Column {
             val categories = getCategories().map { it.toUiModel() }
             CategoryCards(categories, onCategoryClick)

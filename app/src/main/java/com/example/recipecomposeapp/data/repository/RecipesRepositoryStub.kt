@@ -112,7 +112,7 @@ private fun initRecipeList(): List<RecipeDto> {
                         " котлету, кольца помидора и закройте верхней половинкой булочки.",
                 "5. Подавайте бургеры горячими с картофельными чипсами или картофельным пюре."
             ),
-            imageUrl = "burger-hamburger.png"
+            imageUrl = "burger_hamburger.png"
         ),
         RecipeDto(
             id = 1,
@@ -156,7 +156,7 @@ private fun initRecipeList(): List<RecipeDto> {
                 "4. Соберите бургер: булочка, майонез, котлета с сыром, бекон, помидор, кетчуп.",
                 "5. Подавайте горячими."
             ),
-            imageUrl = "burger-cheeseburger.png"
+            imageUrl = "burger_cheeseburger.png"
         )
     )
 }
