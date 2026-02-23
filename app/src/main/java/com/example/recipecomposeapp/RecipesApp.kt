@@ -37,7 +37,7 @@ fun RecipesApp() {
             }
         ) { innerPadding ->
             when (currentScreenState) {
-                ScreenId.CATEGORIES -> CategoriesScreen(innerPadding)
+                ScreenId.CATEGORIES -> CategoriesScreen(innerPadding, {})
                 ScreenId.FAVORITES -> FavoritesScreen(innerPadding)
                 ScreenId.RECIPES -> RecipesScreen(innerPadding)
             }

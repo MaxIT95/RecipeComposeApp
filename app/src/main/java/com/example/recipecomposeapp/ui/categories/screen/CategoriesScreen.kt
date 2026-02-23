@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import coil.size.Dimension
 import com.example.recipecomposeapp.R
 import com.example.recipecomposeapp.core.ui.ScreenHeader
 import com.example.recipecomposeapp.data.repository.getCategories
@@ -20,18 +19,18 @@ import com.example.recipecomposeapp.ui.categories.model.toUiModel
 import com.example.recipecomposeapp.ui.theme.Dimensions
 
 @Composable
-fun CategoriesScreen(innerPadding: PaddingValues) {
+fun CategoriesScreen(innerPadding: PaddingValues, onCategoryClick: (CategoryUiModel) -> Unit) {
     Column(modifier = Modifier.padding(innerPadding)) {
         ScreenHeader("КАТЕГОРИИ ", R.drawable.bcg_categories)
         Column {
             val categories = getCategories().map { it.toUiModel() }
-            CategoryCards(categories)
+            CategoryCards(categories, onCategoryClick)
         }
     }
 }
 
 @Composable
-fun CategoryCards(categories: List<CategoryUiModel>) {
+fun CategoryCards(categories: List<CategoryUiModel>, onCategoryClick: (CategoryUiModel) -> Unit) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
@@ -42,7 +41,7 @@ fun CategoryCards(categories: List<CategoryUiModel>) {
         content = {
             items(categories) { category ->
                 CategoryItem(
-                    category, {}
+                    category, onCategoryClick
                 )
             }
         }
@@ -52,5 +51,5 @@ fun CategoryCards(categories: List<CategoryUiModel>) {
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun CategoriesScreenPreview() {
-    CategoriesScreen(PaddingValues(Dimensions.paddingLarge))
+    CategoriesScreen(PaddingValues(Dimensions.paddingLarge), {})
 }
