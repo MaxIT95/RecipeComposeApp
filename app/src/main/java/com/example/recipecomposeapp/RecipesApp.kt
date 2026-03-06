@@ -46,10 +46,17 @@ fun RecipesApp() {
                 })
 
                 ScreenId.FAVORITES -> FavoritesScreen(innerPadding)
-                ScreenId.RECIPES -> RecipesScreen(
-                    category = selectedCategory ?: error("Category is required"),
-                    innerPadding
-                )
+                ScreenId.RECIPES -> {
+                    selectedCategory?.let { category ->
+                        RecipesScreen(
+                            {},
+                            category.id,
+                            category.title,
+                            category.imageUrl,
+                            innerPadding
+                        )
+                    }
+                }
             }
         }
     }

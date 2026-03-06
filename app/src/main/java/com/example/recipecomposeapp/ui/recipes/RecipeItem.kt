@@ -18,6 +18,7 @@ import coil.compose.AsyncImage
 import com.example.recipecomposeapp.R
 import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.theme.Dimensions
+import com.example.recipecomposeapp.ui.theme.Dimensions.cardMediumHeight
 import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
 
 @Composable
@@ -36,7 +37,7 @@ fun ReceiptItem(receipt: RecipeUiModel, onClick: (Int) -> Unit) {
                 contentScale = ContentScale.Crop,
                 error = painterResource(R.drawable.img_error),
                 placeholder = painterResource(R.drawable.img_placeholder),
-                modifier = Modifier.fillMaxWidth().height(130.dp)
+                modifier = Modifier.fillMaxWidth().height(cardMediumHeight)
             )
 
             Text(

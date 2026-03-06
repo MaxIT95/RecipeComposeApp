@@ -23,11 +23,7 @@ fun FavoritesScreen(innerPadding: PaddingValues) {
         LazyColumn(
             contentPadding = PaddingValues(horizontal = Dimensions.paddingLarge)
         ) {
-//            item {
-//                ReceiptCard(
-//                    "Классический гамбургер",
-//                    R.drawable.burger_hamburger
-//                )
+
         }
     }
 }
