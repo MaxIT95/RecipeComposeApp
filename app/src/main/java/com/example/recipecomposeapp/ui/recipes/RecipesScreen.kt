@@ -34,7 +34,7 @@ fun RecipesScreen(
             categoryTitle, categoryImageUrl
         )
 
-        LaunchedEffect(Unit) {
+        LaunchedEffect(categoryId) {
             receipts = getRecipesByCategoryId(categoryId)
         }
 

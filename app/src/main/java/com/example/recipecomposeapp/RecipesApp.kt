@@ -51,8 +51,8 @@ fun RecipesApp() {
                         RecipesScreen(
                             {},
                             category.id,
-                            category.title,
                             category.imageUrl,
+                            category.title,
                             innerPadding
                         )
                     }
