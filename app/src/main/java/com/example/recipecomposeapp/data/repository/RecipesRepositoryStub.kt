@@ -19,6 +19,10 @@ fun getRecipesByCategoryId(categoryId: Int): List<RecipeDto> {
     }
 }
 
+fun getCategoryById(categoryId: Int): CategoryDto? {
+    return categoryList.find { it.id == categoryId }
+}
+
 private fun initCategoryList(): List<CategoryDto> {
     return listOf(
         CategoryDto(
