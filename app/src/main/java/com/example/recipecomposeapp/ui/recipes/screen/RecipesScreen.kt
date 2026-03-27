@@ -74,6 +74,6 @@ fun RecipesScreen(
 @Preview(showBackground = true, showSystemUi = true)
 fun RecipesScreenPreview() {
     RecipesScreen(
-        {} as (Int, RecipeUiModel) -> Unit, 1, PaddingValues(0.dp)
+        { _, _ -> }, 1, PaddingValues(0.dp)
     )
 }
