@@ -1,4 +1,4 @@
-package com.example.recipecomposeapp.ui.recipes
+package com.example.recipecomposeapp.ui.recipes.screen
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
@@ -19,13 +19,15 @@ import com.example.recipecomposeapp.core.ui.ScreenHeader
 import com.example.recipecomposeapp.data.model.RecipeDto
 import com.example.recipecomposeapp.data.repository.getCategoryById
 import com.example.recipecomposeapp.data.repository.getRecipesByCategoryId
+import com.example.recipecomposeapp.ui.recipes.ReceiptItem
+import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.recipes.model.toUiModel
 import com.example.recipecomposeapp.ui.theme.Dimensions
 import com.example.recipecomposeapp.utils.ASSETS_URI_PREFIX
 
 @Composable
 fun RecipesScreen(
-    onRecipeClick: (Int) -> Unit,
+    onRecipeClick: (Int, RecipeUiModel) -> Unit,
     categoryId: Int, innerPadding: PaddingValues
 ) {
     // получаем объект категории по categoryId
@@ -38,7 +40,6 @@ fun RecipesScreen(
         Column(
             modifier = Modifier.padding(paddingValues = innerPadding)
         ) {
-            Log.i("+++", "УРАЛ ${category.imageUrl}")
             ScreenHeader(
                 category.title, ASSETS_URI_PREFIX + category.imageUrl
             )
@@ -73,6 +74,6 @@ fun RecipesScreen(
 @Preview(showBackground = true, showSystemUi = true)
 fun RecipesScreenPreview() {
     RecipesScreen(
-        {}, 1, PaddingValues(0.dp)
+        { _, _ -> }, 1, PaddingValues(0.dp)
     )
 }
