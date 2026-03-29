@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.recipecomposeapp.core.ui.ScreenHeader
@@ -41,7 +42,7 @@ fun RecipesScreen(
             modifier = Modifier.padding(paddingValues = innerPadding)
         ) {
             ScreenHeader(
-                category.title, ASSETS_URI_PREFIX + category.imageUrl
+                category.title.uppercase(), ASSETS_URI_PREFIX + category.imageUrl
             )
 
             LaunchedEffect(categoryId) {

@@ -44,7 +44,7 @@ fun AppNavHost(
             val recipe = navHostController.previousBackStackEntry?.savedStateHandle?.get<RecipeUiModel>(KEY_RECIPE_OBJECT)
 
             if (recipe != null) {
-                RecipeDetailsScreen(recipe)
+                RecipeDetailsScreen(recipe, paddingValues)
             }
         }
 
