@@ -49,7 +49,7 @@ fun RecipeDetailsScreen(
     val scaledIngredients = remember(currentPortions) {
         recipe.ingredients.map { ingredient ->
             ingredient.copy(
-                quantity = (ingredient.quantity.toInt() * currentPortions).toString()
+                quantity = (ingredient.quantity.toDouble() * currentPortions).toString()
             )
         }
     }
@@ -69,6 +69,15 @@ fun RecipeDetailsScreen(
         )
         // 3 список ингредиентов
         IngredientsList(ingredients = scaledIngredients, commonModifier)
+
+        Spacer(Modifier.padding(vertical = 5.dp))
+        Text(
+            text = "СПОСОБ ПРИГОТОВЛЕНИЯ",
+            color = MaterialTheme.colorScheme.primary,
+            style = RecipesAppTypography.displayLarge
+        )
+        Spacer(Modifier.padding(vertical = 5.dp))
+        InstructionsList(recipe.method)
     }
 }
 
@@ -114,7 +123,7 @@ fun PortionsSlider(
 @Composable
 fun IngredientsList(
     ingredients: List<IngredientUiModel>,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier,
@@ -136,7 +145,7 @@ fun IngredientsList(
 }
 
 @Composable
-fun IngredientItem(ingredient: IngredientUiModel, modifier: Modifier) {
+fun IngredientItem(ingredient: IngredientUiModel, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth(),
@@ -153,6 +162,31 @@ fun IngredientItem(ingredient: IngredientUiModel, modifier: Modifier) {
             color = MaterialTheme.colorScheme.secondary,
             style = RecipesAppTypography.bodyMedium
         )
+    }
+}
+
+@Composable
+fun InstructionsList(instructions: List<String>, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults
+            .cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        shape = RoundedCornerShape(Dimensions.paddingLarge)
+    ) {
+        instructions.forEachIndexed { index, step ->
+            Text(
+                text = "${index + 1} $step}",
+                color = MaterialTheme.colorScheme.secondary,
+                style = RecipesAppTypography.bodyMedium
+            )
+            if (index < instructions.lastIndex) {
+                HorizontalDivider(
+                    Modifier.padding(
+                        horizontal = Dimensions.paddingLarge
+                    )
+                )
+            }
+        }
     }
 }
 
