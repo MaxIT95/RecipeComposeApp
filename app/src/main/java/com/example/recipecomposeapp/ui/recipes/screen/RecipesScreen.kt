@@ -41,7 +41,7 @@ fun RecipesScreen(
             modifier = Modifier.padding(paddingValues = innerPadding)
         ) {
             ScreenHeader(
-                category.title, ASSETS_URI_PREFIX + category.imageUrl
+                category.title.uppercase(), ASSETS_URI_PREFIX + category.imageUrl
             )
 
             LaunchedEffect(categoryId) {

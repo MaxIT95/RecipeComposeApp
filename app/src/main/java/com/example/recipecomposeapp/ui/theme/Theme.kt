@@ -13,6 +13,7 @@ private val RecipesAppLightColorScheme  = lightColorScheme(
     tertiaryContainer = SliderTrackColor,
     background = BackgroundColor,
     surface = SurfaceColor,
+    secondary = TextSecondaryColor,
     outline = DividerColor,
 )
 
@@ -23,6 +24,7 @@ private val RecipesAppDarkColorScheme  = darkColorScheme(
     tertiaryContainer = SliderTrackColorDark,
     background = BackgroundColorDark,
     surface = SurfaceColorDark,
+    secondary = TextSecondaryColor,
     outline = DividerColorDark,
 )
 

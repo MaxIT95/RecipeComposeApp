@@ -23,7 +23,7 @@ const val CATEGORIES_IMAGE_URL = ASSETS_URI_PREFIX + "bcg_categories.png"
 @Composable
 fun CategoriesScreen(innerPadding: PaddingValues, onCategoryClick: (CategoryUiModel) -> Unit) {
     Column(modifier = Modifier.padding(innerPadding)) {
-        ScreenHeader("КАТЕГОРИИ ", CATEGORIES_IMAGE_URL)
+        ScreenHeader("КАТЕГОРИИ", CATEGORIES_IMAGE_URL)
         Column {
             val categories = getCategories().map { it.toUiModel() }
             CategoryCards(categories, onCategoryClick)
