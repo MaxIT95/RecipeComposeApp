@@ -1,24 +1,51 @@
 package com.example.recipecomposeapp.ui.navigation
 
+import android.content.Intent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.recipecomposeapp.data.repository.getRecipeById
 import com.example.recipecomposeapp.ui.categories.screen.CategoriesScreen
 import com.example.recipecomposeapp.ui.details.RecipeDetailsScreen
 import com.example.recipecomposeapp.ui.favorites.screen.FavoritesScreen
 import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.recipes.screen.RecipesScreen
 import com.example.recipecomposeapp.utils.KEY_RECIPE_OBJECT
+import kotlinx.coroutines.delay
 
 @Composable
 fun AppNavHost(
     navHostController: NavHostController,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    deepLinkIntent: Intent?
 ) {
+
+    LaunchedEffect(deepLinkIntent) {
+        deepLinkIntent?.data?.let { uri ->
+            val recipeId: Int? = when (uri.scheme) {
+                DEEP_LINK_SCHEME ->
+                    // recipeapp://recipe/123 → host="recipe", pathSegments=[123]
+                    if (uri.host == "recipe") uri.pathSegments[0].toIntOrNull() else null
+
+                "https", "http" ->
+                    // https://.../recipe/123 → pathSegments=[recipe, 123]
+                    if (uri.pathSegments[0] == "recipe") uri.pathSegments[1].toIntOrNull() else null
+
+                else -> null
+            }
+
+            if (recipeId != null) {
+                delay(100) // даем время на инициализацию графа
+                navHostController.navigate(Destination.Recipe.createRoute(recipeId))
+            }
+        }
+    }
+
     NavHost(
         navController = navHostController,
         startDestination = Destination.Categories.route
@@ -41,10 +68,25 @@ fun AppNavHost(
             route = Destination.Recipe.route,
             arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
         ) { _ ->
-            val recipe = navHostController.previousBackStackEntry?.savedStateHandle?.get<RecipeUiModel>(KEY_RECIPE_OBJECT)
+            val recipe =
+                navHostController.previousBackStackEntry?.savedStateHandle?.get<RecipeUiModel>(
+                    KEY_RECIPE_OBJECT
+                )
 
             if (recipe != null) {
                 RecipeDetailsScreen(recipe)
+            }
+        }
+
+        composable(
+            route = Destination.Recipe.route,
+            arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
+            val recipe = getRecipeById(recipeId) // ищем в stub-данных по ID
+
+            recipe?.let {
+                RecipeDetailsScreen(it)
             }
         }
 
