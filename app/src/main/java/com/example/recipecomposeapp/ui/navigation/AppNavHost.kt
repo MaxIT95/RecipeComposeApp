@@ -86,7 +86,7 @@ fun AppNavHost(
             val recipe = getRecipeById(recipeId) // ищем в stub-данных по ID
 
             recipe?.let {
-                RecipeDetailsScreen(it)
+                RecipeDetailsScreen(it, paddingValues)
             }
         }
 
