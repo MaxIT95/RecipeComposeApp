@@ -74,7 +74,7 @@ fun AppNavHost(
                 )
 
             if (recipe != null) {
-                RecipeDetailsScreen(recipe)
+                RecipeDetailsScreen(recipe, paddingValues)
             }
         }
 

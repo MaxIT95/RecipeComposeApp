@@ -13,8 +13,9 @@ data class RecipeUiModel(
     val ingredients: List<IngredientUiModel>,
     val method: List<String>,
     val isFavorite: Boolean = false,
-    val imageUrl: String
-): Parcelable
+    val imageUrl: String,
+    val portions: Int = 1
+) : Parcelable
 
 fun RecipeDto.toUiModel() = RecipeUiModel(
     id = id,
