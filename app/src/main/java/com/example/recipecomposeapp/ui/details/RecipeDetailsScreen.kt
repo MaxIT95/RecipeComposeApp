@@ -93,7 +93,6 @@ fun RecipeDetailsScreen(
                 style = RecipesAppTypography.displayLarge,
             )
         }
-        Spacer(Modifier.padding(vertical = 5.dp))
         InstructionsList(recipe.method, commonModifier)
     }
 }
@@ -192,9 +191,10 @@ fun InstructionsList(instructions: List<String>, modifier: Modifier = Modifier) 
     ) {
         instructions.forEachIndexed { index, step ->
             Text(
-                text = "${index + 1} $step}",
-                color = MaterialTheme.colorScheme.secondary,
-                style = RecipesAppTypography.bodyMedium
+                modifier = modifier.padding(horizontal = Dimensions.paddingSmall),
+            text = step,
+            color = MaterialTheme.colorScheme.secondary,
+            style = RecipesAppTypography.bodyMedium
             )
             if (index < instructions.lastIndex) {
                 HorizontalDivider(
