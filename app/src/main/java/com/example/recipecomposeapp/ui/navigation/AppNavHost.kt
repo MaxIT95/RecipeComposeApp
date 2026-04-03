@@ -85,11 +85,7 @@ fun AppNavHost(
                     context, recipe, paddingValues,
                     isFavorite = isFavorite,
                     onFavoriteToggle = {
-                        if (isFavorite) {
-                            favoritePrefsManager.removeFromFavorites(recipe.id)
-                        } else {
-                            favoritePrefsManager.addToFavorites(recipe.id)
-                        }
+                        onToggleFavorites(isFavorite, recipe.id, favoritePrefsManager)
                     })
             } else {
                 val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
@@ -103,11 +99,7 @@ fun AppNavHost(
                         paddingValues,
                         isFavorite = isFavorite,
                         onFavoriteToggle = {
-                            if (isFavorite) {
-                                favoritePrefsManager.removeFromFavorites(recipe.id)
-                            } else {
-                                favoritePrefsManager.addToFavorites(recipe.id)
-                            }
+                            onToggleFavorites(isFavorite, recipe.id, favoritePrefsManager)
                         }
                     )
                 }
@@ -125,5 +117,17 @@ fun AppNavHost(
         composable(route = Destination.Favorites.route) {
             FavoritesScreen(paddingValues)
         }
+    }
+}
+
+private fun onToggleFavorites(
+    isFavorite: Boolean,
+    recipeId: Int,
+    favoritePrefsManager: FavoritePrefsManager
+) {
+    if (isFavorite) {
+        favoritePrefsManager.removeFromFavorites(recipeId)
+    } else {
+        favoritePrefsManager.addToFavorites(recipeId)
     }
 }
