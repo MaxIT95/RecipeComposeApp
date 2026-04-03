@@ -67,7 +67,7 @@ fun AppNavHost(
         composable(
             route = Destination.Recipe.route,
             arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
-        ) { _ ->
+        ) { backStackEntry ->
             val recipe =
                 navHostController.previousBackStackEntry?.savedStateHandle?.get<RecipeUiModel>(
                     KEY_RECIPE_OBJECT
@@ -75,18 +75,13 @@ fun AppNavHost(
 
             if (recipe != null) {
                 RecipeDetailsScreen(recipe, paddingValues)
-            }
-        }
+            } else {
+                val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
+                val recipe = getRecipeById(recipeId) // ищем в stub-данных по ID
 
-        composable(
-            route = Destination.Recipe.route,
-            arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
-            val recipe = getRecipeById(recipeId) // ищем в stub-данных по ID
-
-            recipe?.let {
-                RecipeDetailsScreen(it, paddingValues)
+                recipe?.let {
+                    RecipeDetailsScreen(it, paddingValues)
+                }
             }
         }
 
