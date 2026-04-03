@@ -1,5 +1,6 @@
 package com.example.recipecomposeapp.ui.details
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,22 +37,19 @@ import com.example.recipecomposeapp.ui.recipes.model.IngredientUiModel
 import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.theme.Dimensions
 import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
-import com.example.recipecomposeapp.utils.FavoritePrefsManager
 import com.example.recipecomposeapp.utils.shareRecipe
 import kotlin.math.roundToInt
 
 @Composable
 fun RecipeDetailsScreen(
+    context: Context,
     recipe: RecipeUiModel,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
     isFavorite: Boolean = false,
     onFavoriteToggle: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val favoritePrefsManager = FavoritePrefsManager(context)
-
     var currentPortions by rememberSaveable { mutableStateOf(recipe.portions) }
-    var isFavoriteState by rememberSaveable { mutableStateOf(favoritePrefsManager.isFavorite(recipe.id)) }
+    var isFavoriteState by rememberSaveable { mutableStateOf(isFavorite) }
 
     val commonModifier = Modifier.padding(
         horizontal = Dimensions.paddingLarge,
@@ -80,14 +78,7 @@ fun RecipeDetailsScreen(
             showShareButton = true,
             onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
             showFavoritesButton = true,
-            onFavoritesClick = {
-                if (isFavoriteState) {
-                    favoritePrefsManager.removeFromFavorites(recipe.id)
-                } else {
-                    favoritePrefsManager.addToFavorites(recipe.id)
-                }
-                isFavoriteState = !isFavoriteState
-            }
+            onFavoritesClick = onFavoriteToggle
         )
         // 2 слово "Ингридиенты" + слайдер порций
         PortionsSelector(
@@ -225,13 +216,12 @@ fun InstructionsList(instructions: List<String>, modifier: Modifier = Modifier) 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun RecipeDetailsScreenPreview() {
-    RecipeDetailsScreen(
+    RecipeDetailsScreen(LocalContext.current,
         RecipeUiModel(
             1, "Рецепт",
             listOf(), listOf(), ""
         ),
-            listOf(), listOf(), false, ""
-        ), onFavoriteToggle = {},
+        onFavoriteToggle = {},
         paddingValues = PaddingValues(16.dp),
     )
 }
