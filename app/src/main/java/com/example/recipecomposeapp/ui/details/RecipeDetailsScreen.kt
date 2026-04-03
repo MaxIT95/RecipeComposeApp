@@ -1,5 +1,6 @@
 package com.example.recipecomposeapp.ui.details
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,18 +37,20 @@ import com.example.recipecomposeapp.ui.recipes.model.IngredientUiModel
 import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.theme.Dimensions
 import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
+import com.example.recipecomposeapp.utils.FavoritePrefsManager
 import com.example.recipecomposeapp.utils.shareRecipe
 import kotlin.math.roundToInt
 
 @Composable
 fun RecipeDetailsScreen(
     recipe: RecipeUiModel,
-    paddingValues: PaddingValues,
-    isFavorite: Boolean = false
+    paddingValues: PaddingValues
 ) {
     val context = LocalContext.current
+    val favoritePrefsManager = FavoritePrefsManager(context)
+
     var currentPortions by rememberSaveable { mutableStateOf(recipe.portions) }
-    var isFavoriteState by rememberSaveable { mutableStateOf(isFavorite) }
+    var isFavoriteState by rememberSaveable { mutableStateOf(favoritePrefsManager.isFavorite(recipe.id)) }
 
     val commonModifier = Modifier.padding(
         horizontal = Dimensions.paddingLarge,
@@ -76,7 +79,14 @@ fun RecipeDetailsScreen(
             showShareButton = true,
             onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
             showFavoritesButton = true,
-            onFavoritesClick = { isFavoriteState = !isFavoriteState }
+            onFavoritesClick = {
+                if (isFavoriteState) {
+                    favoritePrefsManager.removeFromFavorites(recipe.id)
+                } else {
+                    favoritePrefsManager.addToFavorites(recipe.id)
+                }
+                isFavoriteState = !isFavoriteState
+            }
         )
         // 2 слово "Ингридиенты" + слайдер порций
         PortionsSelector(
@@ -217,7 +227,7 @@ fun RecipeDetailsScreenPreview() {
     RecipeDetailsScreen(
         RecipeUiModel(
             1, "Рецепт",
-            listOf(), listOf(), false, ""
+            listOf(), listOf(), ""
         ),
         paddingValues = PaddingValues(16.dp),
     )
