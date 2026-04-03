@@ -1,7 +1,6 @@
 package com.example.recipecomposeapp.utils
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.edit
 
 const val RECIPE_APP_PREFS = "recipe_app_prefs"
