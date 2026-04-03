@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -108,7 +109,8 @@ fun FavoritesButton(
         ) {
             Icon(
                 painter = painterResource(iconState),
-                contentDescription = "Добавить в избранное"
+                contentDescription = "Добавить в избранное",
+                tint = Color.Unspecified
             )
         }
     }
@@ -128,7 +130,8 @@ fun ShareButton(
         ) {
             Icon(
                 painter = painterResource(R.drawable.share),
-                contentDescription = "Добавить в избранное"
+                contentDescription = "Добавить в избранное",
+                tint = Color.Unspecified
             )
         }
     }
