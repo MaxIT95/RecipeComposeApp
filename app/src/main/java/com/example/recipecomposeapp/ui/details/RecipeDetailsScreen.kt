@@ -44,6 +44,8 @@ import kotlin.math.roundToInt
 fun RecipeDetailsScreen(
     recipe: RecipeUiModel,
     paddingValues: PaddingValues
+    isFavorite: Boolean = false,
+    onFavoriteToggle: () -> Unit,
 ) {
     val context = LocalContext.current
     val favoritePrefsManager = FavoritePrefsManager(context)
@@ -228,6 +230,8 @@ fun RecipeDetailsScreenPreview() {
             1, "Рецепт",
             listOf(), listOf(), ""
         ),
+            listOf(), listOf(), false, ""
+        ), onFavoriteToggle = {},
         paddingValues = PaddingValues(16.dp),
     )
 }
