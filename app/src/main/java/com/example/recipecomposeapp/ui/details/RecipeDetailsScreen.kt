@@ -22,12 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.recipecomposeapp.R
@@ -42,17 +42,19 @@ import kotlin.math.roundToInt
 @Composable
 fun RecipeDetailsScreen(
     recipe: RecipeUiModel,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    isFavorite: Boolean = false
 ) {
     val context = LocalContext.current
-    var currentPortions by remember { mutableStateOf(recipe.portions) }
+    var currentPortions by rememberSaveable { mutableStateOf(recipe.portions) }
+    var isFavoriteState by rememberSaveable { mutableStateOf(isFavorite) }
 
     val commonModifier = Modifier.padding(
         horizontal = Dimensions.paddingLarge,
         vertical = Dimensions.paddingLarge
     )
 
-    val scaledIngredients = remember(currentPortions) {
+    val scaledIngredients = remember(currentPortions, recipe.ingredients) {
         recipe.ingredients.map { ingredient ->
             ingredient.copy(
                 quantity = (ingredient.quantity.toDouble() * currentPortions).toString()
@@ -70,10 +72,12 @@ fun RecipeDetailsScreen(
         ScreenHeader(
             recipe.title.uppercase(),
             recipe.imageUrl,
+            isFavorite = isFavoriteState,
             showShareButton = true,
             onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
             showFavoritesButton = true,
-            onFavoritesClick = {}) // todo пока заглушка
+            onFavoritesClick = { isFavoriteState = !isFavoriteState }
+        )
         // 2 слово "Ингридиенты" + слайдер порций
         PortionsSelector(
             currentPortions, { currentPortions = it },
@@ -192,9 +196,9 @@ fun InstructionsList(instructions: List<String>, modifier: Modifier = Modifier) 
         instructions.forEachIndexed { index, step ->
             Text(
                 modifier = modifier.padding(horizontal = Dimensions.paddingSmall),
-            text = step,
-            color = MaterialTheme.colorScheme.secondary,
-            style = RecipesAppTypography.bodyMedium
+                text = step,
+                color = MaterialTheme.colorScheme.secondary,
+                style = RecipesAppTypography.bodyMedium
             )
             if (index < instructions.lastIndex) {
                 HorizontalDivider(

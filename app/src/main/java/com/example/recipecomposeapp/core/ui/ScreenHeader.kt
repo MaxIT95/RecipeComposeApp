@@ -1,5 +1,7 @@
 package com.example.recipecomposeapp.core.ui
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,12 +18,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -35,7 +41,8 @@ fun ScreenHeader(
     imageUrl: String,
     modifier: Modifier = Modifier,
     showFavoritesButton: Boolean = false,
-    onFavoritesClick: () -> Unit = {}, //todo заглушка, позже реализовую
+    isFavorite: Boolean = false,
+    onFavoritesClick: () -> Unit = {},
     showShareButton: Boolean = false,
     onShareClick: () -> Unit = {}
 ) {
@@ -67,7 +74,8 @@ fun ScreenHeader(
 
             FavoritesButton(
                 showFavoritesButton,
-                onFavoritesClick
+                onFavoritesClick,
+                isFavorite = isFavorite
             )
         }
 
@@ -94,24 +102,33 @@ fun ScreenHeader(
 @Composable
 fun FavoritesButton(
     showFavoritesButton: Boolean = false,
-    onShareClick: () -> Unit
+    onFavoritesClick: () -> Unit,
+    isFavorite: Boolean
 ) {
 
     if (showFavoritesButton) {
-        //нужно получать состояния кнопки (todo будем брать из ВМ избранного)
-        var isAddedToFavorites by remember { mutableStateOf(false) }
-
-        val iconState =
-            if (isAddedToFavorites) R.drawable.ic_heart else R.drawable.ic_heart_empty
-
         IconButton(
-            onClick = { isAddedToFavorites = !isAddedToFavorites },
+            onClick = onFavoritesClick,
         ) {
-            Icon(
-                painter = painterResource(iconState),
-                contentDescription = "Добавить в избранное",
-                tint = Color.Unspecified
-            )
+            Crossfade(
+                targetState = isFavorite,
+                animationSpec = tween(durationMillis = 300),
+                label = "favorite_animation"
+            ) { isCurrentlyFavorite ->
+                // Lambda получает текущее значение targetState
+                // При изменении isFavorite, Crossfade плавно переключит между двумя иконками
+                val heartIcon = rememberVectorPainter(
+                    image = ImageVector.vectorResource(
+                        id = if (isCurrentlyFavorite) R.drawable.ic_heart else R.drawable.ic_heart_empty
+                    )
+                )
+
+                Icon(
+                    painter = heartIcon,
+                    contentDescription = "Favorite",
+                    tint = Color.Unspecified // Сохраняет оригинальные цвета из drawable
+                )
+            }
         }
     }
 }
