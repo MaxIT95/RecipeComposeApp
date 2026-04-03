@@ -90,7 +90,6 @@ fun AppNavHost(
                         } else {
                             favoritePrefsManager.addToFavorites(recipe.id)
                         }
-                        isFavorite = !isFavorite
                     })
             } else {
                 val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
@@ -109,7 +108,6 @@ fun AppNavHost(
                             } else {
                                 favoritePrefsManager.addToFavorites(recipe.id)
                             }
-                            isFavorite = !isFavorite
                         }
                     )
                 }

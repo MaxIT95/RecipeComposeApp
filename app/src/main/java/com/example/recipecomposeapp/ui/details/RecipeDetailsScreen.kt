@@ -78,7 +78,10 @@ fun RecipeDetailsScreen(
             showShareButton = true,
             onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
             showFavoritesButton = true,
-            onFavoritesClick = onFavoriteToggle
+            onFavoritesClick = {
+                onFavoriteToggle
+                isFavoriteState = !isFavoriteState
+            }
         )
         // 2 слово "Ингридиенты" + слайдер порций
         PortionsSelector(
@@ -216,7 +219,8 @@ fun InstructionsList(instructions: List<String>, modifier: Modifier = Modifier) 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun RecipeDetailsScreenPreview() {
-    RecipeDetailsScreen(LocalContext.current,
+    RecipeDetailsScreen(
+        LocalContext.current,
         RecipeUiModel(
             1, "Рецепт",
             listOf(), listOf(), ""
