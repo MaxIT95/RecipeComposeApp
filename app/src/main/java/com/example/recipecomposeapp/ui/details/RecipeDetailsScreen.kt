@@ -43,7 +43,8 @@ import kotlin.math.roundToInt
 fun RecipeDetailsScreen(
     recipe: RecipeUiModel,
     paddingValues: PaddingValues,
-    isFavorite: Boolean = false
+    isFavorite: Boolean = false,
+    onFavoriteToggle: () -> Unit,
 ) {
     val context = LocalContext.current
     var currentPortions by rememberSaveable { mutableStateOf(recipe.portions) }
@@ -76,7 +77,7 @@ fun RecipeDetailsScreen(
             showShareButton = true,
             onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
             showFavoritesButton = true,
-            onFavoritesClick = { isFavoriteState = !isFavoriteState }
+            onFavoritesClick = onFavoriteToggle
         )
         // 2 слово "Ингридиенты" + слайдер порций
         PortionsSelector(
@@ -218,7 +219,7 @@ fun RecipeDetailsScreenPreview() {
         RecipeUiModel(
             1, "Рецепт",
             listOf(), listOf(), false, ""
-        ),
+        ), onFavoriteToggle = {},
         paddingValues = PaddingValues(16.dp),
     )
 }
