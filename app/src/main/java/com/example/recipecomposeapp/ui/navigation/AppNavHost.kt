@@ -74,13 +74,13 @@ fun AppNavHost(
                 )
 
             if (recipe != null) {
-                RecipeDetailsScreen(recipe, paddingValues)
+                RecipeDetailsScreen(recipe, paddingValues, onFavoriteToggle = {})
             } else {
                 val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
                 val recipe = getRecipeById(recipeId) // ищем в stub-данных по ID
 
                 recipe?.let {
-                    RecipeDetailsScreen(it, paddingValues)
+                    RecipeDetailsScreen(it, paddingValues, onFavoriteToggle = {})
                 }
             }
         }
