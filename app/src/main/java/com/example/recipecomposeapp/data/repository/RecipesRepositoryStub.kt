@@ -3,6 +3,8 @@ package com.example.recipecomposeapp.data.repository
 import com.example.recipecomposeapp.data.model.CategoryDto
 import com.example.recipecomposeapp.data.model.IngredientDto
 import com.example.recipecomposeapp.data.model.RecipeDto
+import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
+import com.example.recipecomposeapp.ui.recipes.model.toUiModel
 
 val categoryList = initCategoryList()
 
@@ -21,6 +23,10 @@ fun getRecipesByCategoryId(categoryId: Int): List<RecipeDto> {
 
 fun getCategoryById(categoryId: Int): CategoryDto? {
     return categoryList.find { it.id == categoryId }
+}
+
+fun getRecipeById(recipeId: Int): RecipeUiModel? {
+    return burgerRecipes.find { it.id == recipeId }?.toUiModel()
 }
 
 private fun initCategoryList(): List<CategoryDto> {

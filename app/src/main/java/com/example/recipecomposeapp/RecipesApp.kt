@@ -1,5 +1,6 @@
 package com.example.recipecomposeapp
 
+import android.content.Intent
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -13,7 +14,7 @@ import com.example.recipecomposeapp.ui.navigation.Destination
 import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
 
 @Composable
-fun RecipesApp() {
+fun RecipesApp(deepLinkIntent: Intent?) {
 
     val navHost = rememberNavController()
 
@@ -31,7 +32,8 @@ fun RecipesApp() {
                 )
             }
         ) { innerPadding ->
-            AppNavHost(navHost, innerPadding)
+            AppNavHost(navHost, innerPadding,
+                deepLinkIntent)
         }
     }
 }
@@ -39,5 +41,5 @@ fun RecipesApp() {
 @Composable
 @Preview
 fun RecipesAppPreview() {
-    RecipesApp()
+    RecipesApp(null)
 }

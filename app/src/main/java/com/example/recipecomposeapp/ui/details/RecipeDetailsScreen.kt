@@ -1,6 +1,7 @@
 package com.example.recipecomposeapp.ui.details
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -22,8 +23,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.recipecomposeapp.R
@@ -32,6 +36,7 @@ import com.example.recipecomposeapp.ui.recipes.model.IngredientUiModel
 import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.theme.Dimensions
 import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
+import com.example.recipecomposeapp.utils.shareRecipe
 import kotlin.math.roundToInt
 
 @Composable
@@ -39,6 +44,7 @@ fun RecipeDetailsScreen(
     recipe: RecipeUiModel,
     paddingValues: PaddingValues
 ) {
+    val context = LocalContext.current
     var currentPortions by remember { mutableStateOf(recipe.portions) }
 
     val commonModifier = Modifier.padding(
@@ -61,7 +67,13 @@ fun RecipeDetailsScreen(
             .verticalScroll(rememberScrollState())
     ) {
         // 1 картинка рецепта + название (аналог как в категории)
-        ScreenHeader(recipe.title.uppercase(), recipe.imageUrl)
+        ScreenHeader(
+            recipe.title.uppercase(),
+            recipe.imageUrl,
+            showShareButton = true,
+            onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
+            showFavoritesButton = true,
+            onFavoritesClick = {}) // todo пока заглушка
         // 2 слово "Ингридиенты" + слайдер порций
         PortionsSelector(
             currentPortions, { currentPortions = it },
@@ -71,13 +83,17 @@ fun RecipeDetailsScreen(
         IngredientsList(ingredients = scaledIngredients, commonModifier)
 
         Spacer(Modifier.padding(vertical = 5.dp))
-        Text(
-            text = "СПОСОБ ПРИГОТОВЛЕНИЯ",
-            color = MaterialTheme.colorScheme.primary,
-            style = RecipesAppTypography.displayLarge
-        )
-        Spacer(Modifier.padding(vertical = 5.dp))
-        InstructionsList(recipe.method)
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "СПОСОБ ПРИГОТОВЛЕНИЯ",
+                color = MaterialTheme.colorScheme.primary,
+                style = RecipesAppTypography.displayLarge,
+            )
+        }
+        InstructionsList(recipe.method, commonModifier)
     }
 }
 
@@ -175,9 +191,10 @@ fun InstructionsList(instructions: List<String>, modifier: Modifier = Modifier) 
     ) {
         instructions.forEachIndexed { index, step ->
             Text(
-                text = "${index + 1} $step}",
-                color = MaterialTheme.colorScheme.secondary,
-                style = RecipesAppTypography.bodyMedium
+                modifier = modifier.padding(horizontal = Dimensions.paddingSmall),
+            text = step,
+            color = MaterialTheme.colorScheme.secondary,
+            style = RecipesAppTypography.bodyMedium
             )
             if (index < instructions.lastIndex) {
                 HorizontalDivider(
