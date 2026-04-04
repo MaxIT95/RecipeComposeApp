@@ -88,7 +88,7 @@ fun AppNavHost(
                     recipe, paddingValues,
                     isFavorite = isFavorite,
                     onFavoriteToggle = {
-                        onToggleFavorites(isFavorite, recipe.id, favoritePrefsManager)
+                        onToggleFavorites(it, recipe.id, favoritePrefsManager)
                     })
             } else {
                 val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
@@ -101,7 +101,7 @@ fun AppNavHost(
                         paddingValues,
                         isFavorite = isFavorite,
                         onFavoriteToggle = {
-                            onToggleFavorites(isFavorite, recipe.id, favoritePrefsManager)
+                            onToggleFavorites(it, recipe.id, favoritePrefsManager)
                         }
                     )
                 }
