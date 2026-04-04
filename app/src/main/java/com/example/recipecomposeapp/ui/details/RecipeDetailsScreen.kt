@@ -1,6 +1,5 @@
 package com.example.recipecomposeapp.ui.details
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,12 +41,12 @@ import kotlin.math.roundToInt
 
 @Composable
 fun RecipeDetailsScreen(
-    context: Context,
     recipe: RecipeUiModel,
     paddingValues: PaddingValues,
     isFavorite: Boolean = false,
     onFavoriteToggle: () -> Unit,
 ) {
+    val context = LocalContext.current
     var currentPortions by rememberSaveable { mutableStateOf(recipe.portions) }
     var isFavoriteState by rememberSaveable { mutableStateOf(isFavorite) }
 
@@ -220,7 +219,6 @@ fun InstructionsList(instructions: List<String>, modifier: Modifier = Modifier) 
 @Preview(showBackground = true, showSystemUi = true)
 fun RecipeDetailsScreenPreview() {
     RecipeDetailsScreen(
-        LocalContext.current,
         RecipeUiModel(
             1, "Рецепт",
             listOf(), listOf(), ""

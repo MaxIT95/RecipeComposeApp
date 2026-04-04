@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -27,7 +28,9 @@ fun AppNavHost(
     deepLinkIntent: Intent?
 ) {
     val context = LocalContext.current
-    val favoritePrefsManager = FavoritePrefsManager(context)
+    val favoritePrefsManager = remember {
+        FavoritePrefsManager(context)
+    }
 
     LaunchedEffect(deepLinkIntent) {
         deepLinkIntent?.data?.let { uri ->
@@ -82,7 +85,7 @@ fun AppNavHost(
                 isFavorite = favoritePrefsManager.isFavorite(recipe.id)
 
                 RecipeDetailsScreen(
-                    context, recipe, paddingValues,
+                    recipe, paddingValues,
                     isFavorite = isFavorite,
                     onFavoriteToggle = {
                         onToggleFavorites(isFavorite, recipe.id, favoritePrefsManager)
@@ -94,7 +97,6 @@ fun AppNavHost(
                 recipe?.let {
                     isFavorite = favoritePrefsManager.isFavorite(recipe.id)
                     RecipeDetailsScreen(
-                        context,
                         it,
                         paddingValues,
                         isFavorite = isFavorite,

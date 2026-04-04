@@ -6,7 +6,7 @@ import androidx.core.content.edit
 const val RECIPE_APP_PREFS = "recipe_app_prefs"
 const val FAVORITES_RECIPE_IDS = "favorite_recipe_ids"
 
-class FavoritePrefsManager(val context: Context) {
+class FavoritePrefsManager(private val context: Context) {
 
     fun isFavorite(recipeId: Int): Boolean {
         val sharedPreferences =
