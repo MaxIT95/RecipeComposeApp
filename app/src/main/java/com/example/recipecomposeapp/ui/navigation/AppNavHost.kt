@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,6 +17,7 @@ import com.example.recipecomposeapp.ui.details.RecipeDetailsScreen
 import com.example.recipecomposeapp.ui.favorites.screen.FavoritesScreen
 import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.recipes.screen.RecipesScreen
+import com.example.recipecomposeapp.utils.FavoritePrefsManager
 import com.example.recipecomposeapp.utils.KEY_RECIPE_OBJECT
 import kotlinx.coroutines.delay
 
@@ -24,6 +27,10 @@ fun AppNavHost(
     paddingValues: PaddingValues,
     deepLinkIntent: Intent?
 ) {
+    val context = LocalContext.current
+    val favoritePrefsManager = remember {
+        FavoritePrefsManager(context)
+    }
 
     LaunchedEffect(deepLinkIntent) {
         deepLinkIntent?.data?.let { uri ->
@@ -72,15 +79,31 @@ fun AppNavHost(
                 navHostController.previousBackStackEntry?.savedStateHandle?.get<RecipeUiModel>(
                     KEY_RECIPE_OBJECT
                 )
+            var isFavorite: Boolean
 
             if (recipe != null) {
-                RecipeDetailsScreen(recipe, paddingValues, onFavoriteToggle = {})
+                isFavorite = favoritePrefsManager.isFavorite(recipe.id)
+
+                RecipeDetailsScreen(
+                    recipe, paddingValues,
+                    isFavorite = isFavorite,
+                    onFavoriteToggle = {
+                        onToggleFavorites(it, recipe.id, favoritePrefsManager)
+                    })
             } else {
                 val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
                 val recipe = getRecipeById(recipeId) // ищем в stub-данных по ID
 
                 recipe?.let {
-                    RecipeDetailsScreen(it, paddingValues, onFavoriteToggle = {})
+                    isFavorite = favoritePrefsManager.isFavorite(recipe.id)
+                    RecipeDetailsScreen(
+                        it,
+                        paddingValues,
+                        isFavorite = isFavorite,
+                        onFavoriteToggle = {
+                            onToggleFavorites(it, recipe.id, favoritePrefsManager)
+                        }
+                    )
                 }
             }
         }
@@ -96,5 +119,17 @@ fun AppNavHost(
         composable(route = Destination.Favorites.route) {
             FavoritesScreen(paddingValues)
         }
+    }
+}
+
+private fun onToggleFavorites(
+    isFavorite: Boolean,
+    recipeId: Int,
+    favoritePrefsManager: FavoritePrefsManager
+) {
+    if (isFavorite) {
+        favoritePrefsManager.removeFromFavorites(recipeId)
+    } else {
+        favoritePrefsManager.addToFavorites(recipeId)
     }
 }

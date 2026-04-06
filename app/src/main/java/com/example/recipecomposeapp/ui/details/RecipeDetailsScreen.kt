@@ -44,7 +44,7 @@ fun RecipeDetailsScreen(
     recipe: RecipeUiModel,
     paddingValues: PaddingValues,
     isFavorite: Boolean = false,
-    onFavoriteToggle: () -> Unit,
+    onFavoriteToggle: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
     var currentPortions by rememberSaveable { mutableStateOf(recipe.portions) }
@@ -77,7 +77,10 @@ fun RecipeDetailsScreen(
             showShareButton = true,
             onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
             showFavoritesButton = true,
-            onFavoritesClick = onFavoriteToggle
+            onFavoritesClick = {
+                onFavoriteToggle(isFavoriteState)
+                isFavoriteState = !isFavoriteState
+            }
         )
         // 2 слово "Ингридиенты" + слайдер порций
         PortionsSelector(
@@ -218,8 +221,9 @@ fun RecipeDetailsScreenPreview() {
     RecipeDetailsScreen(
         RecipeUiModel(
             1, "Рецепт",
-            listOf(), listOf(), false, ""
-        ), onFavoriteToggle = {},
+            listOf(), listOf(), ""
+        ),
+        onFavoriteToggle = {},
         paddingValues = PaddingValues(16.dp),
     )
 }
