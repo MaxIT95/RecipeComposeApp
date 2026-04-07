@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
+    implementation("androidx.datastore:datastore-preferences:1.2.1") // или выше
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
