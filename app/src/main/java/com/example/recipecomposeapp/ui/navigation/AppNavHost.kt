@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -87,19 +88,23 @@ fun AppNavHost(
                 )
 
             val coroutineScope = rememberCoroutineScope()
-            var isFavorite by remember { mutableStateOf(false) }
 
             if (recipe != null) {
 
-                LaunchedEffect(recipe.id) {
-                    isFavorite = favoriteDataStoreManager.isFavorite(recipe.id)
-                }
+                val isFavorite by favoriteDataStoreManager
+                    .isFavorite(recipe.id)
+                    .collectAsState(initial = false)
 
                 RecipeDetailsScreen(
-                    recipe, paddingValues,
+                    recipe,
+                    paddingValues,
                     isFavorite = isFavorite,
                     onFavoriteToggle = {
-                        onToggleFavorites(it, recipe.id, favoriteDataStoreManager, coroutineScope)
+                        onToggleFavorites(
+                            it, recipe.id,
+                            favoriteDataStoreManager,
+                            coroutineScope
+                        )
                     })
             } else {
                 val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
@@ -107,9 +112,9 @@ fun AppNavHost(
 
                 recipe?.let { it ->
 
-                    LaunchedEffect(recipe.id) {
-                        isFavorite = favoriteDataStoreManager.isFavorite(it.id)
-                    }
+                    val isFavorite by favoriteDataStoreManager
+                        .isFavorite(recipe.id)
+                        .collectAsState(initial = false)
 
                     RecipeDetailsScreen(
                         it,
