@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.recipecomposeapp.core.ui.ScreenHeader
-import com.example.recipecomposeapp.data.repository.getCategories
+import com.example.recipecomposeapp.data.repository.RecipesRepository
 import com.example.recipecomposeapp.ui.categories.CategoryItem
 import com.example.recipecomposeapp.ui.categories.model.CategoryUiModel
 import com.example.recipecomposeapp.ui.categories.model.toUiModel
@@ -21,11 +21,12 @@ import com.example.recipecomposeapp.utils.ASSETS_URI_PREFIX
 const val CATEGORIES_IMAGE_URL = ASSETS_URI_PREFIX + "bcg_categories.png"
 
 @Composable
-fun CategoriesScreen(innerPadding: PaddingValues, onCategoryClick: (CategoryUiModel) -> Unit) {
+fun CategoriesScreen(innerPadding: PaddingValues, onCategoryClick: (CategoryUiModel) -> Unit,
+                     recipesRepository: RecipesRepository) {
     Column(modifier = Modifier.padding(innerPadding)) {
         ScreenHeader("КАТЕГОРИИ", CATEGORIES_IMAGE_URL)
         Column {
-            val categories = getCategories().map { it.toUiModel() }
+            val categories = recipesRepository.getCategories().map { it.toUiModel() }
             CategoryCards(categories, onCategoryClick)
         }
     }
@@ -53,5 +54,6 @@ fun CategoryCards(categories: List<CategoryUiModel>, onCategoryClick: (CategoryU
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun CategoriesScreenPreview() {
-    CategoriesScreen(PaddingValues(Dimensions.paddingLarge), {})
+    CategoriesScreen(PaddingValues(Dimensions.paddingLarge), {},
+        RecipesRepository())
 }
