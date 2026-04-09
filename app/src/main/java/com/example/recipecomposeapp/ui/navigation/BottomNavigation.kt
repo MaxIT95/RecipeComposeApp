@@ -14,20 +14,25 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.recipecomposeapp.R
 import com.example.recipecomposeapp.ui.theme.Dimensions
 import com.example.recipecomposeapp.ui.theme.RecipesAppTypography
+import com.example.recipecomposeapp.utils.FavoriteDataStoreManager
 
 @Composable
 fun BottomNavigation(
     onCategoriesClick: () -> Unit,
     onFavoriteClick: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    favoriteDataStoreManager: FavoriteDataStoreManager
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
         val modButton: Modifier = Modifier
@@ -36,12 +41,13 @@ fun BottomNavigation(
         NavigationButton(
             "КАТЕГОРИИ", onCategoriesClick,
             MaterialTheme.colorScheme.tertiary,
-            modButton, null
+            modButton, null, null
         )
         NavigationButton(
             "ИЗБРАННОЕ", onFavoriteClick,
             MaterialTheme.colorScheme.error,
-            modButton, R.drawable.ic_heart_empty
+            modButton, R.drawable.ic_heart_empty,
+            favoriteDataStoreManager
         )
     }
 }
@@ -51,7 +57,8 @@ fun NavigationButton(
     name: String, onClick: () -> Unit,
     color: Color,
     mod: Modifier,
-    iconId: Int?
+    iconId: Int?,
+    favoriteDataStoreManager: FavoriteDataStoreManager?
 ) {
     Button(
         contentPadding = PaddingValues(0.dp),
@@ -68,8 +75,19 @@ fun NavigationButton(
             name,
             style = RecipesAppTypography.titleMedium
         )
-        if (iconId != null) {
+        if (iconId != null && name == "ИЗБРАННОЕ" && favoriteDataStoreManager != null) {
             Spacer(modifier = Modifier.width(Dimensions.paddingMedium))
+
+            val countFavorites by favoriteDataStoreManager.getFavoriteCountFlow()
+                .collectAsState(initial = 0)
+
+            if (countFavorites > 0) {
+                Text(
+                    countFavorites.toString(),
+                    style = RecipesAppTypography.titleMedium
+                )
+            }
+
             Icon(
                 painter = painterResource(iconId),
                 contentDescription = "",
@@ -81,5 +99,5 @@ fun NavigationButton(
 @Composable
 @Preview(showSystemUi = true, showBackground = true)
 fun BottomNavigationPreview() {
-    BottomNavigation({}, {}, Modifier)
+    BottomNavigation({}, {}, Modifier, FavoriteDataStoreManager(LocalContext.current))
 }
