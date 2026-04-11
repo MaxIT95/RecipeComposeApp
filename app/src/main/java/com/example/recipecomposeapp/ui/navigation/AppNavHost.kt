@@ -1,22 +1,21 @@
 package com.example.recipecomposeapp.ui.navigation
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.recipecomposeapp.data.repository.getRecipeById
+import com.example.recipecomposeapp.data.repository.RecipesRepository
 import com.example.recipecomposeapp.ui.categories.screen.CategoriesScreen
 import com.example.recipecomposeapp.ui.details.RecipeDetailsScreen
 import com.example.recipecomposeapp.ui.favorites.screen.FavoritesScreen
@@ -37,6 +36,9 @@ fun AppNavHost(
     val context = LocalContext.current
     val favoriteDataStoreManager = remember {
         FavoriteDataStoreManager(context)
+    }
+    val recipesRepository = remember {
+        RecipesRepository()
     }
 
     LaunchedEffect(deepLinkIntent) {
@@ -75,7 +77,7 @@ fun AppNavHost(
                     recipe
                 )
                 navHostController.navigate(Destination.Recipe.createRoute(id))
-            }, innerPadding = paddingValues)
+            }, innerPadding = paddingValues, repository = recipesRepository)
         }
 
         composable(
@@ -108,13 +110,14 @@ fun AppNavHost(
                     })
             } else {
                 val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
-                val recipe = getRecipeById(recipeId) // ищем в stub-данных по ID
+                val recipe = recipesRepository.getRecipeById(recipeId) // ищем в stub-данных по ID
 
                 recipe?.let { it ->
 
                     val isFavorite by favoriteDataStoreManager
                         .isFavorite(recipe.id)
                         .collectAsState(initial = false)
+                    Log.i("+++", "iddd=${recipe.id} value $isFavorite")
 
                     RecipeDetailsScreen(
                         it,
@@ -136,13 +139,23 @@ fun AppNavHost(
         composable(
             route = Destination.Categories.route,
         ) {
-            CategoriesScreen(paddingValues) { category ->
+            CategoriesScreen(paddingValues, { category ->
                 navHostController.navigate("recipes/${category.id}")
-            }
+            }, recipesRepository)
         }
 
         composable(route = Destination.Favorites.route) {
-            FavoritesScreen(paddingValues)
+            FavoritesScreen(
+                paddingValues,
+                recipesRepository,
+                favoriteDataStoreManager,
+                onRecipeClick = { id, recipe ->
+                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                        KEY_RECIPE_OBJECT,
+                        recipe
+                    )
+                    navHostController.navigate(Destination.Recipe.createRoute(id))
+                })
         }
     }
 }

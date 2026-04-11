@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +50,10 @@ fun RecipeDetailsScreen(
     val context = LocalContext.current
     var currentPortions by rememberSaveable { mutableStateOf(recipe.portions) }
     var isFavoriteState by rememberSaveable { mutableStateOf(isFavorite) }
+
+    LaunchedEffect(isFavorite) {
+        isFavoriteState = isFavorite
+    }
 
     val commonModifier = Modifier.padding(
         horizontal = Dimensions.paddingLarge,

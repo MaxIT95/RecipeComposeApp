@@ -17,8 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.recipecomposeapp.core.ui.ScreenHeader
 import com.example.recipecomposeapp.data.model.RecipeDto
-import com.example.recipecomposeapp.data.repository.getCategoryById
-import com.example.recipecomposeapp.data.repository.getRecipesByCategoryId
+import com.example.recipecomposeapp.data.repository.RecipesRepository
 import com.example.recipecomposeapp.ui.recipes.ReceiptItem
 import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
 import com.example.recipecomposeapp.ui.recipes.model.toUiModel
@@ -28,10 +27,11 @@ import com.example.recipecomposeapp.utils.ASSETS_URI_PREFIX
 @Composable
 fun RecipesScreen(
     onRecipeClick: (Int, RecipeUiModel) -> Unit,
-    categoryId: Int, innerPadding: PaddingValues
+    categoryId: Int, innerPadding: PaddingValues,
+    repository: RecipesRepository
 ) {
     // получаем объект категории по categoryId
-    val category = getCategoryById(categoryId)
+    val category = repository.getCategoryById(categoryId)
 
     if (category != null) {
 
@@ -45,7 +45,7 @@ fun RecipesScreen(
             )
 
             LaunchedEffect(categoryId) {
-                receipts = getRecipesByCategoryId(categoryId)
+                receipts = repository.getRecipesByCategoryId(categoryId)
             }
 
             LazyColumn(
@@ -74,6 +74,7 @@ fun RecipesScreen(
 @Preview(showBackground = true, showSystemUi = true)
 fun RecipesScreenPreview() {
     RecipesScreen(
-        { _, _ -> }, 1, PaddingValues(0.dp)
+        { _, _ -> }, 1, PaddingValues(0.dp),
+        RecipesRepository()
     )
 }
