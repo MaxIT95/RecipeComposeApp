@@ -37,7 +37,9 @@ fun AppNavHost(
     val favoriteDataStoreManager = remember {
         FavoriteDataStoreManager(context)
     }
-    val recipesRepository = RecipesRepository()
+    val recipesRepository = remember {
+        RecipesRepository()
+    }
 
     LaunchedEffect(deepLinkIntent) {
         deepLinkIntent?.data?.let { uri ->

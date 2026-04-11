@@ -38,7 +38,7 @@ fun FavoritesScreen(
         ScreenHeader("ИЗБРАННОЕ", FAVORITES_IMAGE_URL)
         Spacer(Modifier.padding(vertical = 10.dp))
 
-        val recipes by
+        val recipes by remember
         favoriteDataStoreManager.getFavoriteIdsFlow().map { ids ->
             ids.mapNotNull { id -> repository.getRecipeById(id.toIntOrNull()) }
         }.collectAsState(initial = emptyList())
