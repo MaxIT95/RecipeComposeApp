@@ -45,12 +45,12 @@ fun AppNavHost(
         deepLinkIntent?.data?.let { uri ->
             val recipeId: Int? = when (uri.scheme) {
                 DEEP_LINK_SCHEME ->
-                    // recipeapp://recipe/123 → host="recipe", pathSegments=[123]
-                    if (uri.host == "recipe") uri.pathSegments[0].toIntOrNull() else null
+                    if (uri.host == "recipe" && uri.pathSegments.isNotEmpty())
+                        uri.pathSegments[0].toIntOrNull() else null
 
                 "https", "http" ->
-                    // https://.../recipe/123 → pathSegments=[recipe, 123]
-                    if (uri.pathSegments[0] == "recipe") uri.pathSegments[1].toIntOrNull() else null
+                    if (uri.pathSegments.size >= 2 && uri.pathSegments[0] == "recipe")
+                        uri.pathSegments[1].toIntOrNull() else null
 
                 else -> null
             }
