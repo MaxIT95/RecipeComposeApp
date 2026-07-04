@@ -3,9 +3,8 @@ package com.example.recipecomposeapp.data.repository
 import com.example.recipecomposeapp.data.model.CategoryDto
 import com.example.recipecomposeapp.data.model.IngredientDto
 import com.example.recipecomposeapp.data.model.RecipeDto
-import com.example.recipecomposeapp.ui.recipes.model.RecipeUiModel
-import com.example.recipecomposeapp.ui.recipes.model.toUiModel
-
+import com.example.recipecomposeapp.features.recipes.presentation.model.RecipeUiModel
+import com.example.recipecomposeapp.features.recipes.presentation.model.toUiModel
 
 class RecipesRepository {
 

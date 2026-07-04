@@ -10,11 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.example.recipecomposeapp.ui.navigation.BottomNavigation
-import com.example.recipecomposeapp.ui.navigation.AppNavHost
-import com.example.recipecomposeapp.ui.navigation.Destination
-import com.example.recipecomposeapp.ui.theme.RecipeComposeAppTheme
-import com.example.recipecomposeapp.utils.FavoriteDataStoreManager
+import com.example.recipecomposeapp.core.navigation.BottomNavigation
+import com.example.recipecomposeapp.core.navigation.AppNavHost
+import com.example.recipecomposeapp.core.navigation.Destination
+import com.example.recipecomposeapp.core.ui.theme.RecipeComposeAppTheme
+import com.example.recipecomposeapp.core.utils.FavoriteDataStoreManager
 
 @Composable
 fun RecipesApp(deepLinkIntent: Intent?) {

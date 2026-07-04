@@ -45,7 +45,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
@@ -57,6 +56,9 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.kotlinx.serialization)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.lifecycle.viewmodel.compose)
     testImplementation(libs.junit)
     implementation("androidx.datastore:datastore-preferences:1.2.1") // или выше
     androidTestImplementation(libs.androidx.junit)
