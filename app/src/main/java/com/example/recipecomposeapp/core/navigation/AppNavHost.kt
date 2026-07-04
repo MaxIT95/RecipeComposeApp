@@ -139,9 +139,9 @@ fun AppNavHost(
         composable(
             route = Destination.Categories.route,
         ) {
-            CategoriesScreen(paddingValues, { category ->
-                navHostController.navigate("recipes/${category.id}")
-            }, recipesRepository)
+            CategoriesScreen(paddingValues, { id, _, _ ->
+                navHostController.navigate("recipes/$id")
+            })
         }
 
         composable(route = Destination.Favorites.route) {

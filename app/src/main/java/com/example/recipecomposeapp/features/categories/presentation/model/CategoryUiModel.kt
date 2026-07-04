@@ -6,8 +6,10 @@ import com.example.recipecomposeapp.data.model.CategoryDto
 
 @Immutable
 data class CategoryUiModel(
-    val id: Int = 0, val title: String = "",
-    val description: String = "", val imageUrl: String = ""
+    val id: Int = 0,
+    val title: String = "",
+    val description: String = "",
+    val imageUrl: String = ""
 )
 
 fun CategoryDto.toUiModel() = CategoryUiModel(
