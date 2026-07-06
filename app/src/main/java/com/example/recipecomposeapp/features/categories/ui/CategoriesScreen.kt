@@ -90,5 +90,5 @@ fun CategoryCards(categories: List<CategoryUiModel>, onCategoryClick: (Int, Stri
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun CategoriesScreenPreview() {
-    CategoriesScreen(PaddingValues(Dimensions.paddingLarge), {} as (Int, String, String) -> Unit)
+    CategoriesScreen(PaddingValues(Dimensions.paddingLarge), { _, _, _ -> })
 }

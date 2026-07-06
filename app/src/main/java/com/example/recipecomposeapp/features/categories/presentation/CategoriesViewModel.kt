@@ -24,9 +24,10 @@ class CategoriesViewModel: ViewModel() {
 
     fun loadCategories() {
 
+        _categoriesUiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             try {
-                _categoriesUiState.update { it.copy(isLoading = true, error = null) }
+                _categoriesUiState.update { it.copy(error = null) }
 
                 val categoryList = recipesRepository.getCategories().map { it.toUiModel() }
                 _categoriesUiState.update { it.copy(categories = categoryList, isLoading = false) }
