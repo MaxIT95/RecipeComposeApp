@@ -25,6 +25,7 @@ class CategoriesViewModel: ViewModel() {
     fun loadCategories() {
 
         _categoriesUiState.update { it.copy(isLoading = true) }
+
         viewModelScope.launch {
             try {
                 _categoriesUiState.update { it.copy(error = null) }
