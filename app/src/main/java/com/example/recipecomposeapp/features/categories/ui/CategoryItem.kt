@@ -21,13 +21,13 @@ import com.example.recipecomposeapp.core.ui.theme.RecipesAppTypography
 import com.example.recipecomposeapp.features.categories.presentation.model.CategoryUiModel
 
 @Composable
-fun CategoryItem(model: CategoryUiModel, onClick: (CategoryUiModel) -> Unit) {
+fun CategoryItem(model: CategoryUiModel, onClick: (Int, String, String) -> Unit) {
     Card(
         modifier = Modifier
             .height(cardLargeSize)
             .fillMaxWidth(),
         onClick = {
-            onClick(model)
+            onClick(model.id, model.title, model.imageUrl)
         },
         colors = CardDefaults
             .cardColors(containerColor = MaterialTheme.colorScheme.surface),
