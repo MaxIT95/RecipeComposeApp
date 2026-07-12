@@ -13,11 +13,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class RecipesViewModel(
-    savedStateHandle: SavedStateHandle) :
+    savedStateHandle: SavedStateHandle
+) :
     ViewModel() {
     val recipeRepository = RecipesRepository()
 
-    private val categoryId: Int = savedStateHandle["categoryId"]!!
+    private val categoryId: Int = savedStateHandle["categoryId"] ?: 0
     private val categoryTitle: String = Uri.decode(savedStateHandle["categoryTitle"] ?: "")
     private val categoryImageUrl: String = Uri.decode(savedStateHandle["categoryImageUrl"] ?: "")
     private val _recipesUiState = MutableStateFlow(RecipesUiState())
@@ -33,7 +34,7 @@ class RecipesViewModel(
         loadRecipes()
     }
 
-    private fun loadRecipes() {
+    fun loadRecipes() {
         _recipesUiState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
