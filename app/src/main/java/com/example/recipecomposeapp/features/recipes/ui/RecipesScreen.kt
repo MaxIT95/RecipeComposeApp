@@ -58,6 +58,14 @@ fun RecipesScreen(
                     Text("Повторить")
                 }
             }
+        } else if (recipesState.recipes.isEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text("Рецепты в категории ${recipesState.categoryTitle} отсутствуют")
+            }
         } else {
             LazyColumn(
                 modifier = Modifier

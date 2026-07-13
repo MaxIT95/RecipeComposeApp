@@ -43,7 +43,7 @@ class RecipesViewModel(
                     .map { it.toUiModel() }
 
                 if (recipes.isNotEmpty()) {
-                    _recipesUiState.update { it.copy(recipes = recipes, isLoading = false) }
+                    _recipesUiState.update { it.copy(recipes = recipes, isLoading = false, error = null) }
                 } else {
                     _recipesUiState.update { it.copy(isLoading = false) }
                 }
