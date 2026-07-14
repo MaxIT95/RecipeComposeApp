@@ -26,6 +26,7 @@ import com.example.recipecomposeapp.features.recipes.ui.RecipesScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
 
 @Composable
 fun AppNavHost(
@@ -68,16 +69,20 @@ fun AppNavHost(
     ) {
         composable(
             route = Destination.Recipes.route,
-            arguments = listOf(navArgument("categoryId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val categoryId = backStackEntry.arguments?.getInt("categoryId") ?: 0
-            RecipesScreen(categoryId = categoryId, onRecipeClick = { id, recipe ->
+            arguments = listOf(
+                navArgument("categoryId") { type = NavType.IntType },
+                navArgument("categoryTitle") { type = NavType.StringType },
+                navArgument("categoryImageUrl") { type = NavType.StringType },
+
+                )
+        ) {
+            RecipesScreen(onRecipeClick = { id, recipe ->
                 navHostController.currentBackStackEntry?.savedStateHandle?.set(
                     KEY_RECIPE_OBJECT,
                     recipe
                 )
                 navHostController.navigate(Destination.Recipe.createRoute(id))
-            }, innerPadding = paddingValues, repository = recipesRepository)
+            }, innerPadding = paddingValues)
         }
 
         composable(
@@ -139,9 +144,12 @@ fun AppNavHost(
         composable(
             route = Destination.Categories.route,
         ) {
-            CategoriesScreen(paddingValues, { id, _, _ ->
-                navHostController.navigate("recipes/$id")
-            })
+            CategoriesScreen(paddingValues) { id, categoryTitle, categoryImageUrl ->
+
+                val encodedTitle = URLEncoder.encode(categoryTitle, "UTF-8")
+                val encodedImageUrl = URLEncoder.encode(categoryImageUrl, "UTF-8")
+                navHostController.navigate("recipes/$id/$encodedTitle/$encodedImageUrl")
+            }
         }
 
         composable(route = Destination.Favorites.route) {
