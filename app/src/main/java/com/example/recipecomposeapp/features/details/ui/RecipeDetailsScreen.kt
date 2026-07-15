@@ -12,14 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,82 +33,104 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.recipecomposeapp.R
 import com.example.recipecomposeapp.core.ui.ScreenHeader
 import com.example.recipecomposeapp.core.ui.theme.Dimensions
 import com.example.recipecomposeapp.core.ui.theme.RecipesAppTypography
 import com.example.recipecomposeapp.core.utils.shareRecipe
+import com.example.recipecomposeapp.features.details.presentation.RecipeDetailsViewModel
+import com.example.recipecomposeapp.features.details.presentation.model.RecipeDetailsUiState
 import com.example.recipecomposeapp.features.recipes.presentation.model.IngredientUiModel
-import com.example.recipecomposeapp.features.recipes.presentation.model.RecipeUiModel
 import kotlin.math.roundToInt
 
 @Composable
 fun RecipeDetailsScreen(
-    recipe: RecipeUiModel,
     paddingValues: PaddingValues,
-    isFavorite: Boolean = false,
-    onFavoriteToggle: (Boolean) -> Unit,
 ) {
-    val context = LocalContext.current
-    var currentPortions by rememberSaveable { mutableStateOf(recipe.portions) }
-    var isFavoriteState by rememberSaveable { mutableStateOf(isFavorite) }
 
-    LaunchedEffect(isFavorite) {
-        isFavoriteState = isFavorite
-    }
+    val recipeDetailsViewModel: RecipeDetailsViewModel = viewModel()
+    val recipeDetailsState: RecipeDetailsUiState by recipeDetailsViewModel.recipeUiState.collectAsState()
 
-    val commonModifier = Modifier.padding(
-        horizontal = Dimensions.paddingLarge,
-        vertical = Dimensions.paddingLarge
-    )
-
-    val scaledIngredients = remember(currentPortions, recipe.ingredients) {
-        recipe.ingredients.map { ingredient ->
-            ingredient.copy(
-                quantity = (ingredient.quantity.toDouble() * currentPortions).toString()
-            )
-        }
-    }
-
-    Column(
-        modifier = Modifier
-            .padding(paddingValues)
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        // 1 картинка рецепта + название (аналог как в категории)
-        ScreenHeader(
-            recipe.title.uppercase(),
-            recipe.imageUrl,
-            isFavorite = isFavoriteState,
-            showShareButton = true,
-            onShareClick = { shareRecipe(context, recipe.id, recipe.title) },
-            showFavoritesButton = true,
-            onFavoritesClick = {
-                onFavoriteToggle(isFavoriteState)
-                isFavoriteState = !isFavoriteState
-            }
-        )
-        // 2 слово "Ингридиенты" + слайдер порций
-        PortionsSelector(
-            currentPortions, { currentPortions = it },
-            commonModifier
-        )
-        // 3 список ингредиентов
-        IngredientsList(ingredients = scaledIngredients, commonModifier)
-
-        Spacer(Modifier.padding(vertical = 5.dp))
-        Box(
+    if (recipeDetailsState.isLoading) {
+        CircularProgressIndicator()
+    } else if (recipeDetailsState.error != null) {
+        Column(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "СПОСОБ ПРИГОТОВЛЕНИЯ",
-                color = MaterialTheme.colorScheme.primary,
-                style = RecipesAppTypography.displayLarge,
-            )
+            Text("Ошибка при загрузке рецепта: ${recipeDetailsState.error}")
+            Spacer(Modifier.padding(vertical = 15.dp))
+
+            Button(
+                onClick = { recipeDetailsViewModel.loadRecipe() },
+                shape = RoundedCornerShape(10.dp)
+            ) {
+                Text("Повторить")
+            }
         }
-        InstructionsList(recipe.method, commonModifier)
+    } else if (recipeDetailsState.recipe != null) {
+        val context = LocalContext.current
+        var currentPortions by rememberSaveable { mutableStateOf(recipeDetailsState.recipe!!.portions) }
+
+        val commonModifier = Modifier.padding(
+            horizontal = Dimensions.paddingLarge,
+            vertical = Dimensions.paddingLarge
+        )
+
+        val scaledIngredients = remember(currentPortions, recipeDetailsState.recipe?.ingredients) {
+            recipeDetailsState.recipe!!.ingredients.map { ingredient ->
+                ingredient.copy(
+                    quantity = (ingredient.quantity.toDouble() * currentPortions).toString()
+                )
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            // 1 картинка рецепта + название (аналог как в категории)
+            ScreenHeader(
+                recipeDetailsState.recipe!!.title.uppercase(),
+                recipeDetailsState.recipe!!.imageUrl,
+                isFavorite = recipeDetailsState.isFavorite,
+                showShareButton = true,
+                onShareClick = {
+                    shareRecipe(
+                        context, recipeDetailsState.recipe!!.id,
+                        recipeDetailsState.recipe!!.title
+                    )
+                },
+                showFavoritesButton = true,
+                onFavoritesClick = {
+                    recipeDetailsViewModel.onToggleFavorites()
+                }
+            )
+            // 2 слово "Ингридиенты" + слайдер порций
+            PortionsSelector(
+                currentPortions, { currentPortions = it },
+                commonModifier
+            )
+            // 3 список ингредиентов
+            IngredientsList(ingredients = scaledIngredients, commonModifier)
+
+            Spacer(Modifier.padding(vertical = 5.dp))
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "СПОСОБ ПРИГОТОВЛЕНИЯ",
+                    color = MaterialTheme.colorScheme.primary,
+                    style = RecipesAppTypography.displayLarge,
+                )
+            }
+            InstructionsList(recipeDetailsState.recipe!!.method, commonModifier)
+        }
     }
 }
 
@@ -224,11 +248,6 @@ fun InstructionsList(instructions: List<String>, modifier: Modifier = Modifier) 
 @Preview(showBackground = true, showSystemUi = true)
 fun RecipeDetailsScreenPreview() {
     RecipeDetailsScreen(
-        RecipeUiModel(
-            1, "Рецепт",
-            listOf(), listOf(), ""
-        ),
-        onFavoriteToggle = {},
         paddingValues = PaddingValues(16.dp),
     )
 }
