@@ -24,7 +24,8 @@ class RecipeDetailsViewModel(
     private val recipeId: Int = savedStateHandle["recipeId"] ?: 0
     private val _countPortions = MutableStateFlow(1)
     val countPortionsState = _countPortions.asStateFlow()
-    private var isFavorite: Boolean = false
+    val isFavoriteFlow = favoriteDataStoreManager.isFavorite(recipeId)
+
     private val _recipeUiState = MutableStateFlow(RecipeDetailsUiState())
     val recipeUiState = _recipeUiState.asStateFlow()
 
@@ -63,12 +64,13 @@ class RecipeDetailsViewModel(
     }
 
     fun toggleFavorite() {
+        _recipeUiState.update { it.copy(isFavorite = !it.isFavorite) }
         viewModelScope.launch {
 
-            if (isFavorite) {
+            if (_recipeUiState.value.isFavorite) {
                 favoriteDataStoreManager.removeFromFavorites(recipeId)
             } else {
-                favoriteDataStoreManager.addFavorite(recipeId)
+                favoriteDataStoreManager.removeFromFavorites(recipeId)
             }
         }
     }
@@ -85,7 +87,6 @@ class RecipeDetailsViewModel(
                 _recipeUiState.update {
                     it.copy(isFavorite = isFav)
                 }
-                isFavorite = isFav
             }
         }
     }
