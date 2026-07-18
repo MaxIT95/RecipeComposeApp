@@ -72,7 +72,8 @@ fun RecipeDetailsScreen(
         }
     } else if (recipeDetailsState.recipe != null) {
         val context = LocalContext.current
-        var currentPortions by rememberSaveable { mutableStateOf(recipeDetailsState.recipe!!.portions) }
+
+        val currentPortions by recipeDetailsViewModel.countPortionsState.collectAsState()
 
         val commonModifier = Modifier.padding(
             horizontal = Dimensions.paddingLarge,
@@ -112,7 +113,7 @@ fun RecipeDetailsScreen(
             )
             // 2 слово "Ингридиенты" + слайдер порций
             PortionsSelector(
-                currentPortions, { currentPortions = it },
+                currentPortions, { recipeDetailsViewModel.updateCountPortions(it) },
                 commonModifier
             )
             // 3 список ингредиентов

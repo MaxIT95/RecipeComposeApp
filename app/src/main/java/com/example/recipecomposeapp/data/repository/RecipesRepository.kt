@@ -27,8 +27,8 @@ class RecipesRepository {
         return categoryList.find { it.id == categoryId }
     }
 
-    fun getRecipeById(recipeId: Int?): RecipeUiModel {
-        return burgerRecipes.find { it.id == recipeId }!!.toUiModel()
+    fun getRecipeById(recipeId: Int?): RecipeUiModel? {
+        return burgerRecipes.find { it.id == recipeId }?.toUiModel()
     }
 
     private fun initCategoryList(): List<CategoryDto> {
