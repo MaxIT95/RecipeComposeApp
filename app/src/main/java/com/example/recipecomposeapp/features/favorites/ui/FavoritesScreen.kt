@@ -76,9 +76,9 @@ fun FavoritesScreen(
             ) {
                 items(
                     items = favoritesState.recipes,
-                    key = { it!!.id }) {
+                    key = { it.id }) {
                     ReceiptItem(
-                        it!!,
+                        it,
                         onRecipeClick
                     )
                 }

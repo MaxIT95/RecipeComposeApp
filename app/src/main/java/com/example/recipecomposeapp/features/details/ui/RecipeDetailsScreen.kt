@@ -52,85 +52,91 @@ fun RecipeDetailsScreen(
     val recipeDetailsViewModel: RecipeDetailsViewModel = viewModel()
     val recipeDetailsState: RecipeDetailsUiState by recipeDetailsViewModel.recipeUiState.collectAsState()
 
-    if (recipeDetailsState.isLoading) {
-        CircularProgressIndicator()
-    } else if (recipeDetailsState.error != null) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text("Ошибка при загрузке рецепта: ${recipeDetailsState.error}")
-            Spacer(Modifier.padding(vertical = 15.dp))
+    Box(modifier = Modifier
+        .padding(paddingValues)
+        .fillMaxSize()) {
 
-            Button(
-                onClick = { recipeDetailsViewModel.loadRecipe() },
-                shape = RoundedCornerShape(10.dp)
-            ) {
-                Text("Повторить")
-            }
-        }
-    } else if (recipeDetailsState.recipe != null) {
-        val context = LocalContext.current
-
-        val currentPortions by recipeDetailsViewModel.countPortionsState.collectAsState()
-
-        val commonModifier = Modifier.padding(
-            horizontal = Dimensions.paddingLarge,
-            vertical = Dimensions.paddingLarge
-        )
-
-        val scaledIngredients = remember(currentPortions, recipeDetailsState.recipe?.ingredients) {
-            recipeDetailsState.recipe!!.ingredients.map { ingredient ->
-                ingredient.copy(
-                    quantity = (ingredient.quantity.toDouble() * currentPortions).toString()
-                )
-            }
-        }
-
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            // 1 картинка рецепта + название (аналог как в категории)
-            ScreenHeader(
-                recipeDetailsState.recipe!!.title.uppercase(),
-                recipeDetailsState.recipe!!.imageUrl,
-                isFavorite = recipeDetailsState.isFavorite,
-                showShareButton = true,
-                onShareClick = {
-                    shareRecipe(
-                        context, recipeDetailsState.recipe!!.id,
-                        recipeDetailsState.recipe!!.title
-                    )
-                },
-                showFavoritesButton = true,
-                onFavoritesClick = {
-                    recipeDetailsViewModel.onToggleFavorites()
-                }
-            )
-            // 2 слово "Ингридиенты" + слайдер порций
-            PortionsSelector(
-                currentPortions, { recipeDetailsViewModel.updateCountPortions(it) },
-                commonModifier
-            )
-            // 3 список ингредиентов
-            IngredientsList(ingredients = scaledIngredients, commonModifier)
-
-            Spacer(Modifier.padding(vertical = 5.dp))
-            Box(
+        if (recipeDetailsState.isLoading) {
+            CircularProgressIndicator()
+        } else if (recipeDetailsState.error != null) {
+            Column(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = "СПОСОБ ПРИГОТОВЛЕНИЯ",
-                    color = MaterialTheme.colorScheme.primary,
-                    style = RecipesAppTypography.displayLarge,
-                )
+                Text("Ошибка при загрузке рецепта: ${recipeDetailsState.error}")
+                Spacer(Modifier.padding(vertical = 15.dp))
+
+                Button(
+                    onClick = { recipeDetailsViewModel.loadRecipe() },
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Text("Повторить")
+                }
             }
-            InstructionsList(recipeDetailsState.recipe!!.method, commonModifier)
+        } else if (recipeDetailsState.recipe != null) {
+            val context = LocalContext.current
+
+            val currentPortions by recipeDetailsViewModel.countPortionsState.collectAsState()
+
+            val commonModifier = Modifier.padding(
+                horizontal = Dimensions.paddingLarge,
+                vertical = Dimensions.paddingLarge
+            )
+
+            val scaledIngredients =
+                remember(currentPortions, recipeDetailsState.recipe?.ingredients) {
+                    recipeDetailsState.recipe!!.ingredients.map { ingredient ->
+                        ingredient.copy(
+                            quantity = (ingredient.quantity.toDouble() * currentPortions).toString()
+                        )
+                    }
+                }
+
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                // 1 картинка рецепта + название (аналог как в категории)
+                ScreenHeader(
+                    recipeDetailsState.recipe!!.title.uppercase(),
+                    recipeDetailsState.recipe!!.imageUrl,
+                    isFavorite = recipeDetailsState.isFavorite,
+                    showShareButton = true,
+                    onShareClick = {
+                        shareRecipe(
+                            context, recipeDetailsState.recipe!!.id,
+                            recipeDetailsState.recipe!!.title
+                        )
+                    },
+                    showFavoritesButton = true,
+                    onFavoritesClick = {
+                        recipeDetailsViewModel.toggleFavorite()
+                    }
+                )
+                // 2 слово "Ингридиенты" + слайдер порций
+                PortionsSelector(
+                    currentPortions, { recipeDetailsViewModel.updatePortions(it) },
+                    commonModifier
+                )
+                // 3 список ингредиентов
+                IngredientsList(ingredients = scaledIngredients, commonModifier)
+
+                Spacer(Modifier.padding(vertical = 5.dp))
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "СПОСОБ ПРИГОТОВЛЕНИЯ",
+                        color = MaterialTheme.colorScheme.primary,
+                        style = RecipesAppTypography.displayLarge,
+                    )
+                }
+                InstructionsList(recipeDetailsState.recipe!!.method, commonModifier)
+            }
         }
     }
 }

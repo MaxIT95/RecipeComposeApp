@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.recipecomposeapp.core.utils.FavoriteDataStoreManager
 import com.example.recipecomposeapp.data.repository.RecipesRepository
 import com.example.recipecomposeapp.features.favorites.presentation.model.FavoritesUiState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -22,7 +23,7 @@ class FavoritesViewModel(
     private val recipeRepository: RecipesRepository = RecipesRepository()
     private val _favoritesUiState = MutableStateFlow(FavoritesUiState())
     val favoritesUiState = _favoritesUiState.asStateFlow()
-
+    private var loadJob: Job? = null
 
     init {
         loadFavoriteRecipes()
@@ -30,8 +31,8 @@ class FavoritesViewModel(
 
     fun loadFavoriteRecipes() {
         _favoritesUiState.update { it.copy(error = null, isLoading = true) }
-
-        viewModelScope.launch {
+        loadJob?.cancel()
+        loadJob = viewModelScope.launch {
 
             try {
                 favoriteDataStoreManager.getFavoriteIdsFlow().map { ids ->

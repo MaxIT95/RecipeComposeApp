@@ -62,7 +62,7 @@ class RecipeDetailsViewModel(
         }
     }
 
-    fun onToggleFavorites() {
+    fun toggleFavorite() {
         viewModelScope.launch {
 
             if (isFavorite) {
@@ -73,7 +73,7 @@ class RecipeDetailsViewModel(
         }
     }
 
-    fun updateCountPortions(count: Int) {
+    fun updatePortions(count: Int) {
         _countPortions.update { count }
     }
 
