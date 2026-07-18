@@ -95,7 +95,6 @@ fun RecipeDetailsScreen(
 
             Column(
                 modifier = Modifier
-                    .padding(paddingValues)
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {

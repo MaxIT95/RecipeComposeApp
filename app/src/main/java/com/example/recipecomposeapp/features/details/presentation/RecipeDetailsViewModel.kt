@@ -64,7 +64,6 @@ class RecipeDetailsViewModel(
     }
 
     fun toggleFavorite() {
-        _recipeUiState.update { it.copy(isFavorite = !it.isFavorite) }
         viewModelScope.launch {
 
             if (_recipeUiState.value.isFavorite) {
@@ -73,6 +72,8 @@ class RecipeDetailsViewModel(
                 favoriteDataStoreManager.removeFromFavorites(recipeId)
             }
         }
+        _recipeUiState.update { it.copy(isFavorite = !it.isFavorite) }
+
     }
 
     fun updatePortions(count: Int) {
