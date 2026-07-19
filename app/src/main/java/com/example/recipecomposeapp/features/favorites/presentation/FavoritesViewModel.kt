@@ -36,18 +36,18 @@ class FavoritesViewModel(
 
 
             favoriteDataStoreManager.getFavoriteIdsFlow().map { ids ->
-                val recipes = ids.map { id ->
+                ids.map { id ->
                     recipeRepository.getRecipeById(id.toIntOrNull())
                         ?: throw RuntimeException("Рецепт с id=$id не найден!")
-                }
-
-                _favoritesUiState.update {
-                    it.copy(isLoading = false, recipes = recipes)
                 }
             }.catch { e ->
                 _favoritesUiState.update { it.copy(error = e.message, isLoading = false) }
             }
-                .collect {}
+                .collect { recipes ->
+                    _favoritesUiState.update {
+                        it.copy(isLoading = false, recipes = recipes)
+                    }
+                }
         }
     }
 }

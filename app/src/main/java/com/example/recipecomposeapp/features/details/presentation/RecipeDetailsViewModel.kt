@@ -69,7 +69,7 @@ class RecipeDetailsViewModel(
             if (_recipeUiState.value.isFavorite) {
                 favoriteDataStoreManager.removeFromFavorites(recipeId)
             } else {
-                favoriteDataStoreManager.removeFromFavorites(recipeId)
+                favoriteDataStoreManager.addFavorite(recipeId)
             }
         }
         _recipeUiState.update { it.copy(isFavorite = !it.isFavorite) }
