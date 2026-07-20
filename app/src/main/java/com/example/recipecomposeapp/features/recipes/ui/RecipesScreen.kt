@@ -27,7 +27,8 @@ import com.example.recipecomposeapp.features.recipes.presentation.model.RecipeUi
 
 @Composable
 fun RecipesScreen(
-    onRecipeClick: (Int, RecipeUiModel) -> Unit, innerPadding: PaddingValues,
+    onRecipeClick: (Int, RecipeUiModel) -> Unit,
+    innerPadding: PaddingValues,
 ) {
 
     val recipesViewModel: RecipesViewModel = viewModel()

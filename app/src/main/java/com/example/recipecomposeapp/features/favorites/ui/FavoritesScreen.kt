@@ -1,52 +1,69 @@
 package com.example.recipecomposeapp.features.favorites.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.recipecomposeapp.core.ui.ScreenHeader
 import com.example.recipecomposeapp.core.ui.theme.Dimensions
 import com.example.recipecomposeapp.core.ui.theme.RecipesAppTypography
 import com.example.recipecomposeapp.core.utils.ASSETS_URI_PREFIX
-import com.example.recipecomposeapp.core.utils.FavoriteDataStoreManager
-import com.example.recipecomposeapp.data.repository.RecipesRepository
+import com.example.recipecomposeapp.features.favorites.presentation.FavoritesViewModel
 import com.example.recipecomposeapp.features.recipes.presentation.model.RecipeUiModel
 import com.example.recipecomposeapp.features.recipes.ui.ReceiptItem
-import kotlinx.coroutines.flow.map
 
 const val FAVORITES_IMAGE_URL = ASSETS_URI_PREFIX + "bcg_favorites.png"
 
 @Composable
 fun FavoritesScreen(
-    innerPadding: PaddingValues, repository: RecipesRepository,
-    favoriteDataStoreManager: FavoriteDataStoreManager,
+    innerPadding: PaddingValues,
     onRecipeClick: (Int, RecipeUiModel) -> Unit
 ) {
+    val viewModel: FavoritesViewModel = viewModel()
+
+    val favoritesState by viewModel.favoritesUiState.collectAsState()
+
     Column(modifier = Modifier.padding(innerPadding)) {
         ScreenHeader("ИЗБРАННОЕ", FAVORITES_IMAGE_URL)
         Spacer(Modifier.padding(vertical = 10.dp))
 
-        val recipes by remember(favoriteDataStoreManager, repository) {
-            favoriteDataStoreManager.getFavoriteIdsFlow().map { ids ->
-                ids.mapNotNull { id -> repository.getRecipeById(id.toIntOrNull()) }
-            }
-        }
-            .collectAsState(initial = emptyList())
+        if (favoritesState.isLoading) {
+            CircularProgressIndicator()
+        } else if (favoritesState.error != null) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text("Ошибка при загрузке избранного: ${favoritesState.error}")
+                Spacer(Modifier.padding(vertical = 15.dp))
 
-        if (recipes.isEmpty()) {
+                Button(
+                    onClick = { viewModel.loadFavoriteRecipes() },
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Text("Повторить")
+                }
+            }
+        } else if (favoritesState.recipes.isEmpty()) {
             Text(
                 text = "Список избранных рецептов пуст",
                 color = MaterialTheme.colorScheme.primary,
@@ -58,7 +75,7 @@ fun FavoritesScreen(
                 contentPadding = PaddingValues(horizontal = Dimensions.paddingLarge)
             ) {
                 items(
-                    items = recipes,
+                    items = favoritesState.recipes,
                     key = { it.id }) {
                     ReceiptItem(
                         it,
@@ -75,7 +92,6 @@ fun FavoritesScreen(
 fun FavoritesScreenPreview() {
     FavoritesScreen(
         PaddingValues(Dimensions.paddingLarge),
-        RecipesRepository(),
-        FavoriteDataStoreManager(LocalContext.current), { _, _ -> }
+        { _, _ -> }
     )
 }
