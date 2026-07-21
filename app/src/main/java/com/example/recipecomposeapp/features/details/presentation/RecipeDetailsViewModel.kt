@@ -24,8 +24,6 @@ class RecipeDetailsViewModel(
     private val recipeId: Int = savedStateHandle["recipeId"] ?: 0
     private val _countPortions = MutableStateFlow(1)
     val countPortionsState = _countPortions.asStateFlow()
-    val isFavoriteFlow = favoriteDataStoreManager.isFavorite(recipeId)
-
     private val _recipeUiState = MutableStateFlow(RecipeDetailsUiState())
     val recipeUiState = _recipeUiState.asStateFlow()
 
