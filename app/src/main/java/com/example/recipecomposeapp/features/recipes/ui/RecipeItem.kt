@@ -21,10 +21,10 @@ import com.example.recipecomposeapp.core.ui.theme.RecipesAppTypography
 import com.example.recipecomposeapp.features.recipes.presentation.model.RecipeUiModel
 
 @Composable
-fun ReceiptItem(receipt: RecipeUiModel, onClick: (Int, RecipeUiModel) -> Unit) {
+fun ReceiptItem(receipt: RecipeUiModel, onClick: (Int) -> Unit) {
     Card(
         modifier = Modifier.padding(vertical = Dimensions.paddingMedium),
-        onClick = { onClick(receipt.id, receipt) },
+        onClick = { onClick(receipt.id) },
         colors = CardDefaults
             .cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(Dimensions.paddingLarge)

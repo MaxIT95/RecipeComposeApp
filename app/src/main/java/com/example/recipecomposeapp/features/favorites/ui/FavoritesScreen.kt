@@ -35,7 +35,7 @@ const val FAVORITES_IMAGE_URL = ASSETS_URI_PREFIX + "bcg_favorites.png"
 @Composable
 fun FavoritesScreen(
     innerPadding: PaddingValues,
-    onRecipeClick: (Int, RecipeUiModel) -> Unit
+    onRecipeClick: (Int) -> Unit
 ) {
     val viewModel: FavoritesViewModel = viewModel()
 
@@ -92,6 +92,6 @@ fun FavoritesScreen(
 fun FavoritesScreenPreview() {
     FavoritesScreen(
         PaddingValues(Dimensions.paddingLarge),
-        { _, _ -> }
+        { _ -> }
     )
 }
