@@ -54,14 +54,9 @@ fun AppNavHost(
                 navArgument("categoryId") { type = NavType.IntType },
                 navArgument("categoryTitle") { type = NavType.StringType },
                 navArgument("categoryImageUrl") { type = NavType.StringType },
-
                 )
         ) {
-            RecipesScreen(onRecipeClick = { id, recipe ->
-                navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                    KEY_RECIPE_OBJECT,
-                    recipe
-                )
+            RecipesScreen(onRecipeClick = { id ->
                 navHostController.navigate(Destination.Recipe.createRoute(id))
             }, innerPadding = paddingValues)
         }
@@ -88,11 +83,7 @@ fun AppNavHost(
         composable(route = Destination.Favorites.route) {
             FavoritesScreen(
                 paddingValues,
-                onRecipeClick = { id, recipe ->
-                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                        KEY_RECIPE_OBJECT,
-                        recipe
-                    )
+                onRecipeClick = { id ->
                     navHostController.navigate(Destination.Recipe.createRoute(id))
                 })
         }

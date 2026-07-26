@@ -23,11 +23,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.recipecomposeapp.core.ui.ScreenHeader
 import com.example.recipecomposeapp.core.ui.theme.Dimensions
 import com.example.recipecomposeapp.features.recipes.presentation.RecipesViewModel
-import com.example.recipecomposeapp.features.recipes.presentation.model.RecipeUiModel
 
 @Composable
 fun RecipesScreen(
-    onRecipeClick: (Int, RecipeUiModel) -> Unit,
+    onRecipeClick: (Int) -> Unit,
     innerPadding: PaddingValues,
 ) {
 
@@ -92,6 +91,6 @@ fun RecipesScreen(
 @Preview(showBackground = true, showSystemUi = true)
 fun RecipesScreenPreview() {
     RecipesScreen(
-        { _, _ -> }, PaddingValues(0.dp)
+        { _ -> }, PaddingValues(0.dp)
     )
 }
